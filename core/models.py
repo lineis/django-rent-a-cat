@@ -6,16 +6,26 @@ from django.shortcuts import reverse
 from django_countries.fields import CountryField
 
 
+"""
+Declare categories and filters by which the entities can be distinguished.
+The main category is coat length, the additional categories are used as filters.
+"""
 CATEGORY_CHOICES = (
-    ('S', 'British Shorthair'),
-    ('SW', 'Sport wear'),
-    ('OW', 'Outwear')
+    ('SH', 'Short Hair'),
+    ('MH', 'Medium Hair'),
+    ('LH', 'Long Hair')
 )
 
 LABEL_CHOICES = (
-    ('P', 'primary'),
-    ('S', 'secondary'),
-    ('D', 'danger')
+    ('LE', 'Low Energy'),
+    ('ME', 'Medium Energy'),
+    ('HE', 'High Energy')
+)
+
+SIZE_CHOICES = (
+    ('S', 'Small Size'),
+    ('M', 'Medium Size'),
+    ('L', 'Large Size')
 )
 
 ADDRESS_CHOICES = (
