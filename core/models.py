@@ -28,7 +28,12 @@ SIZE_CHOICES = (
     ('L', 'Large Size')
 )
 
-# color and gender?
+GENDER_CHOICES = (
+    ('M', 'Boy'),
+    ('F', 'Girl')
+)
+
+# color?
 
 ADDRESS_CHOICES = (
     ('B', 'Billing'),
@@ -50,8 +55,11 @@ class Item(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField()
     discount_price = models.FloatField(blank=True, null=True)
+    available = models.BooleanField()
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
-    label = models.CharField(choices=LABEL_CHOICES, max_length=1)
+    label = models.CharField(choices=LABEL_CHOICES, max_length=2)
+    size = models.CharField(choices=SIZE_CHOICES, max_length=1, default='NULL')
+    gender = models.CharField(choices=GENDER_CHOICES, max_length=1, default='M')
     slug = models.SlugField()
     description = models.TextField()
     image = models.ImageField()

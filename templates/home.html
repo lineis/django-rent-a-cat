@@ -83,20 +83,23 @@
                 <h5>
                   <strong>
                     <a href="{{ item.get_absolute_url }}" class="dark-grey-text">{{ item.title }}
-                      <span class="badge badge-pill {{ item.get_label_display }}-color">NEW</span>
+                      <!-- <span class="badge badge-pill {{ item.get_label_display }}-color">NEW</span> -->
+                      <span class="badge badge-pill primary-color">{{ item.get_size_display }}</span>
+                      <span class="badge badge-pill secondary-color">{{ item.get_label_display }}</span>
+                      <span class="badge badge-pill btn-dark">{{ item.get_gender_display }}</span>
                     </a>
                   </strong>
                 </h5>
 
-                <h4 class="font-weight-bold blue-text">
-                  <strong>$
-                  {% if item.discount_price %}
-                  {{ item.discount_price }}
-                  {% else %}
-                  {{ item.price }}
-                  {% endif %}
-                  </strong>
+                {% if item.available %}
+                <h4 class="font-weight-bold green-text">
+                    <strong>AVAILABLE</strong>
                 </h4>
+                {% else %}
+                <h4 class="font-weight-bold blue-grey-text">
+                  <strong>TAKEN</strong>
+                </h4>
+                {% endif %}
 
               </div>
 
