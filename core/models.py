@@ -28,6 +28,8 @@ SIZE_CHOICES = (
     ('L', 'Large Size')
 )
 
+# color and gender?
+
 ADDRESS_CHOICES = (
     ('B', 'Billing'),
     ('S', 'Shipping'),
