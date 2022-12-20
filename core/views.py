@@ -370,6 +370,20 @@ class HomeView(ListView):
             context['object_list_'+c[0]] = Item.objects.filter(category__exact=c[0])
         return context
 
+class HomeViewSearchResult(ListView):
+    model = Item
+    paginate_by = 10
+    template_name = "home_search_result.html"
+
+    def get_context_data(self, **kwargs):
+        """
+        Change content according to search results.
+        :param kwargs:
+        :return:
+        """
+        context = super(HomeViewSearchResult, self).get_context_data(**kwargs)
+        context['search_result'] = Item.objects.filter(title__contains='Pep')
+        return context
 
 class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):

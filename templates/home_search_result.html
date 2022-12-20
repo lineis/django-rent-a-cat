@@ -59,18 +59,9 @@
 
           <form class="form-inline">
             <div class="md-form my-0">
-              <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+              <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" value="{{ request.GET.title }}">
             </div>
           </form>
-          <!-- TODO: search function?
-          <form class="form-inline">
-            <form class="md-form my-0" method="POST" action="home/search-result/">
-                {% csrf_token %}
-              <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                <input type="submit" value="Search">
-            </form>
-          </form>
-            -->
         </div>
         <!-- Collapsible content -->
 
@@ -84,7 +75,7 @@
 
         <div class="row wow fadeIn">
 
-          {% for item in object_list %}
+          {% for item in search_result %}
 
               <div class="col-lg-3 col-md-6 mb-4">
 
