@@ -17,6 +17,7 @@ app_name = 'core'
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
+    path('home/', HomeView.as_view(), name='overview'),
     path('how-to/', display_how_to, name='how-to'),
     path('about-us/', display_about_us, name='about-us'),
     path('checkout/', CheckoutView.as_view(), name='checkout'),

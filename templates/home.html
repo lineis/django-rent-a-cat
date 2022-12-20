@@ -6,6 +6,17 @@
       {% include "carousel.html" %}
   </head>
 
+<script>
+    function showCategory(category_string) {
+        document.getElementById(category_string).style.display = 'block';
+        document.getElementById('nav-item-' + category_string).classList.add("active");
+    }
+    function hideCategory(category_string) {
+        document.getElementById(category_string).style.display = 'none';
+        document.getElementById('nav-item-' + category_string).classList.remove("active");
+    }
+</script>
+
   <main>
     <div class="container">
 
@@ -14,7 +25,7 @@
       <nav class="navbar navbar-expand-lg navbar-dark mdb-color lighten-3 mt-3 mb-5">
 
         <!-- Navbar brand -->
-        <span class="navbar-brand">Coat Length:</span>
+        <span class="navbar-brand">Coat Length: </span>
 
         <!-- Collapse button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
@@ -27,19 +38,20 @@
 
           <!-- Links -->
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">All
+            <li id="nav-item-ALL" class="nav-item active">
+              <a class="nav-link" href="#ALL" onclick="showCategory('ALL');hideCategory('SH');hideCategory('MH');hideCategory('LH')">All
                 <span class="sr-only">(current)</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">British Shorthair</a>
+              <!-- TODO: Remove hard-coded categories and access them automatically, have only one section with dynamic name -->
+            <li id="nav-item-SH" class="nav-item">
+              <a class="nav-link" href="#SH" onclick="showCategory('SH');hideCategory('MH');hideCategory('LH');hideCategory('ALL')">Short Hair</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Sport wears</a>
+            <li id="nav-item-MH" class="nav-item">
+              <a class="nav-link" href="#MH" onclick="showCategory('MH');hideCategory('SH');hideCategory('LH');hideCategory('ALL')">Medium Hair</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Outwears</a>
+            <li id="nav-item-LH" class="nav-item">
+              <a class="nav-link" href="#LH" onclick="showCategory('LH');hideCategory('SH');hideCategory('MH');hideCategory('ALL')">Long Hair</a>
             </li>
 
           </ul>
@@ -58,59 +70,229 @@
 
 
 
-      <!--Section: Products v.3-->
-      <section class="text-center mb-4">
+      <!--Section: all categories -->
+      <section id="ALL" class="text-center mb-4">
 
         <div class="row wow fadeIn">
 
           {% for item in object_list %}
-          <div class="col-lg-3 col-md-6 mb-4">
 
-            <div class="card">
+              <div class="col-lg-3 col-md-6 mb-4">
 
-              <div class="view overlay">
-                {% comment %} <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12.jpg" class="card-img-top" {% endcomment %}
-                <img src="{{ item.image.url }}" class="card-img-top">
-                <a href="{{ item.get_absolute_url }}">
-                  <div class="mask rgba-white-slight"></div>
-                </a>
-              </div>
+                <div class="card">
 
-              <div class="card-body text-center">
-                <a href="" class="grey-text">
-                  <h5>{{ item.get_category_display }}</h5>
-                </a>
-                <h5>
-                  <strong>
-                    <a href="{{ item.get_absolute_url }}" class="dark-grey-text">{{ item.title }}
-                      <!-- <span class="badge badge-pill {{ item.get_label_display }}-color">NEW</span> -->
-                      <span class="badge badge-pill primary-color">{{ item.get_size_display }}</span>
-                      <span class="badge badge-pill secondary-color">{{ item.get_label_display }}</span>
-                      <span class="badge badge-pill btn-dark">{{ item.get_gender_display }}</span>
+                  <div class="view overlay">
+                    {% comment %} <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12.jpg" class="card-img-top" {% endcomment %}
+                    <img src="{{ item.image.url }}" class="card-img-top">
+                    <a href="{{ item.get_absolute_url }}">
+                      <div class="mask rgba-white-slight"></div>
                     </a>
-                  </strong>
-                </h5>
+                  </div>
 
-                {% if item.available %}
-                <h4 class="font-weight-bold green-text">
-                    <strong>AVAILABLE</strong>
-                </h4>
-                {% else %}
-                <h4 class="font-weight-bold blue-grey-text">
-                  <strong>TAKEN</strong>
-                </h4>
-                {% endif %}
+                  <div class="card-body text-center">
+                    <a href="" class="grey-text">
+                      <h5>{{ item.get_category_display }}</h5>
+                    </a>
+                    <h5>
+                      <strong>
+                        <a href="{{ item.get_absolute_url }}" class="dark-grey-text">{{ item.title }}
+                          <!-- <span class="badge badge-pill {{ item.get_label_display }}-color">NEW</span> -->
+                          <span class="badge badge-pill primary-color">{{ item.get_size_display }}</span>
+                          <span class="badge badge-pill secondary-color">{{ item.get_label_display }}</span>
+                          <span class="badge badge-pill btn-dark">{{ item.get_gender_display }}</span>
+                        </a>
+                      </strong>
+                    </h5>
+
+                    {% if item.available %}
+                    <h4 class="font-weight-bold green-text">
+                        <strong>AVAILABLE</strong>
+                    </h4>
+                    {% else %}
+                    <h4 class="font-weight-bold blue-grey-text">
+                      <strong>TAKEN</strong>
+                    </h4>
+                    {% endif %}
+
+                  </div>
+
+                </div>
 
               </div>
 
-            </div>
-
-          </div>
           {% endfor %}
         </div>
 
       </section>
-      <!--Section: Products v.3-->
+      <!--Section: all categories -->
+
+      <!--Section: Short Hair -->
+      <section id="SH" class="text-center mb-4" style="display: none">
+
+        <div class="row wow fadeIn">
+
+          {% for item in object_list_SH %}
+
+              <div class="col-lg-3 col-md-6 mb-4">
+
+                <div class="card">
+
+                  <div class="view overlay">
+                    {% comment %} <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12.jpg" class="card-img-top" {% endcomment %}
+                    <img src="{{ item.image.url }}" class="card-img-top">
+                    <a href="{{ item.get_absolute_url }}">
+                      <div class="mask rgba-white-slight"></div>
+                    </a>
+                  </div>
+
+                  <div class="card-body text-center">
+                    <a href="" class="grey-text">
+                      <h5>{{ item.get_category_display }}</h5>
+                    </a>
+                    <h5>
+                      <strong>
+                        <a href="{{ item.get_absolute_url }}" class="dark-grey-text">{{ item.title }}
+                          <!-- <span class="badge badge-pill {{ item.get_label_display }}-color">NEW</span> -->
+                          <span class="badge badge-pill primary-color">{{ item.get_size_display }}</span>
+                          <span class="badge badge-pill secondary-color">{{ item.get_label_display }}</span>
+                          <span class="badge badge-pill btn-dark">{{ item.get_gender_display }}</span>
+                        </a>
+                      </strong>
+                    </h5>
+
+                    {% if item.available %}
+                    <h4 class="font-weight-bold green-text">
+                        <strong>AVAILABLE</strong>
+                    </h4>
+                    {% else %}
+                    <h4 class="font-weight-bold blue-grey-text">
+                      <strong>TAKEN</strong>
+                    </h4>
+                    {% endif %}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+          {% endfor %}
+        </div>
+
+      </section>
+      <!--Section: Short Hair -->
+
+      <!--Section: Medium Hair -->
+      <section id="MH" class="text-center mb-4" style="display: none">
+
+        <div class="row wow fadeIn">
+
+          {% for item in object_list_MH %}
+
+              <div class="col-lg-3 col-md-6 mb-4">
+
+                <div class="card">
+
+                  <div class="view overlay">
+                    {% comment %} <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12.jpg" class="card-img-top" {% endcomment %}
+                    <img src="{{ item.image.url }}" class="card-img-top">
+                    <a href="{{ item.get_absolute_url }}">
+                      <div class="mask rgba-white-slight"></div>
+                    </a>
+                  </div>
+
+                  <div class="card-body text-center">
+                    <a href="" class="grey-text">
+                      <h5>{{ item.get_category_display }}</h5>
+                    </a>
+                    <h5>
+                      <strong>
+                        <a href="{{ item.get_absolute_url }}" class="dark-grey-text">{{ item.title }}
+                          <!-- <span class="badge badge-pill {{ item.get_label_display }}-color">NEW</span> -->
+                          <span class="badge badge-pill primary-color">{{ item.get_size_display }}</span>
+                          <span class="badge badge-pill secondary-color">{{ item.get_label_display }}</span>
+                          <span class="badge badge-pill btn-dark">{{ item.get_gender_display }}</span>
+                        </a>
+                      </strong>
+                    </h5>
+
+                    {% if item.available %}
+                    <h4 class="font-weight-bold green-text">
+                        <strong>AVAILABLE</strong>
+                    </h4>
+                    {% else %}
+                    <h4 class="font-weight-bold blue-grey-text">
+                      <strong>TAKEN</strong>
+                    </h4>
+                    {% endif %}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+          {% endfor %}
+        </div>
+
+      </section>
+      <!--Section: Medium Hair -->
+
+      <!--Section: Long Hair -->
+      <section id="LH" class="text-center mb-4" style="display: none">
+
+        <div class="row wow fadeIn">
+
+          {% for item in object_list_LH %}
+
+              <div class="col-lg-3 col-md-6 mb-4">
+
+                <div class="card">
+
+                  <div class="view overlay">
+                    {% comment %} <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12.jpg" class="card-img-top" {% endcomment %}
+                    <img src="{{ item.image.url }}" class="card-img-top">
+                    <a href="{{ item.get_absolute_url }}">
+                      <div class="mask rgba-white-slight"></div>
+                    </a>
+                  </div>
+
+                  <div class="card-body text-center">
+                    <a href="" class="grey-text">
+                      <h5>{{ item.get_category_display }}</h5>
+                    </a>
+                    <h5>
+                      <strong>
+                        <a href="{{ item.get_absolute_url }}" class="dark-grey-text">{{ item.title }}
+                          <!-- <span class="badge badge-pill {{ item.get_label_display }}-color">NEW</span> -->
+                          <span class="badge badge-pill primary-color">{{ item.get_size_display }}</span>
+                          <span class="badge badge-pill secondary-color">{{ item.get_label_display }}</span>
+                          <span class="badge badge-pill btn-dark">{{ item.get_gender_display }}</span>
+                        </a>
+                      </strong>
+                    </h5>
+
+                    {% if item.available %}
+                    <h4 class="font-weight-bold green-text">
+                        <strong>AVAILABLE</strong>
+                    </h4>
+                    {% else %}
+                    <h4 class="font-weight-bold blue-grey-text">
+                      <strong>TAKEN</strong>
+                    </h4>
+                    {% endif %}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+          {% endfor %}
+        </div>
+
+      </section>
+      <!--Section: Long Hair -->
 
       <!--Pagination-->
 

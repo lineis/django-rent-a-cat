@@ -13,7 +13,7 @@ from django.utils import timezone
 from django.views.generic import ListView, DetailView, View
 
 from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
-from .models import Item, OrderItem, Order, Address, Payment, Coupon, Refund, UserProfile
+from .models import Item, OrderItem, Order, Address, Payment, Coupon, Refund, UserProfile, CATEGORY_CHOICES
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -356,6 +356,19 @@ class HomeView(ListView):
     model = Item
     paginate_by = 10
     template_name = "home.html"
+
+    def get_context_data(self, **kwargs):
+        """
+        Add extra context for filtering categories.
+        :param kwargs:
+        :return:
+        """
+        context = super(HomeView, self).get_context_data(**kwargs)
+        # query for every category add a new list to the context
+        # example: for c = ('SH', 'Short Hair), add object_list_SH as list of all short haired cats
+        for c in CATEGORY_CHOICES:
+            context['object_list_'+c[0]] = Item.objects.filter(category__exact=c[0])
+        return context
 
 
 class OrderSummaryView(LoginRequiredMixin, View):

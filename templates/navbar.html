@@ -19,15 +19,15 @@
 
         <!-- Left -->
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item"> <!-- active"> TODO: on-click event handler (set active on-click) -->
-            <a class="nav-link waves-effect" href="/">Overview
+          <li id="nav-item-Overview" {% if request.path == '/home/' %} class="nav-item active" {% else %} class="nav-item"  {% endif %}>
+            <a class="nav-link waves-effect" href="/home">Overview
               <span class="sr-only">(current)</span>
             </a>
-          <li class="nav-item">
+          <li id="nav-item-HowTo" {% if request.path == '/how-to/' %} class="nav-item active" {% else %} class="nav-item" {% endif %}>
             <a class="nav-link waves-effect" href="/how-to">How To</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link waves-effect" href="/about-us">About Us</a>
+          <li id="nav-item-About Us" {% if request.path == '/about-us/' %} class="nav-item active" {% else %} class="nav-item" {% endif %}>
+            <a class="nav-link waves-effect" href="/about-us" onclick="setActive('AboutUs');setInactive('HowTo');setInactive('Overview')">About Us</a>
           </li>
         </ul>
 
