@@ -36,6 +36,13 @@ def is_valid_form(values):
             valid = False
     return valid
 
+# create trivial functions for views that are independent from models
+def display_how_to(request):
+    return render(request, 'how_to.html')
+
+def display_about_us(request):
+    return render(request, 'about_us.html')
+
 
 class CheckoutView(View):
     def get(self, *args, **kwargs):

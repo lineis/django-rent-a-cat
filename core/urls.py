@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import (
+from .views import *
+"""(
     ItemDetailView,
     CheckoutView,
     HomeView,
@@ -10,12 +11,14 @@ from .views import (
     PaymentView,
     AddCouponView,
     RequestRefundView
-)
+)"""
 
 app_name = 'core'
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
+    path('how-to/', display_how_to, name='how-to'),
+    path('about-us/', display_about_us, name='about-us'),
     path('checkout/', CheckoutView.as_view(), name='checkout'),
     path('order-summary/', OrderSummaryView.as_view(), name='order-summary'),
     path('product/<slug>/', ItemDetailView.as_view(), name='product'),
