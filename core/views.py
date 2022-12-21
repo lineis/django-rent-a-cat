@@ -13,7 +13,7 @@ from django.utils import timezone
 from django.views.generic import ListView, DetailView, View
 
 from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
-from .models import Item, OrderItem, Order, Address, Payment, Coupon, Refund, UserProfile, CATEGORY_CHOICES
+from .models import Item, OrderItem, Order, Address, Payment, Coupon, Refund, UserProfile, CATEGORY_CHOICES, SIZE_CHOICES, GENDER_CHOICES, ENERGY_CHOICES
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -358,17 +358,56 @@ class HomeView(ListView):
     template_name = "home.html"
 
     def get_context_data(self, **kwargs):
-        """
-        Add extra context for filtering categories.
-        :param kwargs:
-        :return:
-        """
+
+        # get items and current context
+        items = Item.objects.all()
         context = super(HomeView, self).get_context_data(**kwargs)
-        # query for every category add a new list to the context
-        # example: for c = ('SH', 'Short Hair), add object_list_SH as list of all short haired cats
-        for c in CATEGORY_CHOICES:
-            context['object_list_'+c[0]] = Item.objects.filter(category__exact=c[0])
+        choice = 'NULL'
+
+        # add attributes to context
+        context['categories'] = CATEGORY_CHOICES
+        context['sizes'] = SIZE_CHOICES
+        context['energies'] = ENERGY_CHOICES
+
+        # Category Filter
+        category_filter = self.request.GET.get('category-filter')
+        if category_filter:
+            choice = category_filter
+            items = items.filter(category__exact=category_filter)
+
+        # Size Filter
+        size_filter = self.request.GET.get('size-filter')
+        if size_filter:
+            choice = size_filter
+            items = items.filter(size__exact=size_filter)
+
+        # Attribute Filter (label / energy)
+        attribute_filter = self.request.GET.get('attribute-filter')
+        if attribute_filter:
+            choice = attribute_filter
+            items = items.filter(label__exact=attribute_filter)
+
+        # add choice to context so that it can be tracked in front-end
+        context['choice'] = choice
+
+        # Refresh items in context
+        context['object_list'] = items
+
         return context
+
+    # OLD FILTERS
+    # def get_context_data(self, **kwargs):
+    #     """
+    #     Add extra context for filtering categories.
+    #     :param kwargs:
+    #     :return:
+    #     """
+    #     context = super(HomeView, self).get_context_data(**kwargs)
+    #     # query for every category add a new list to the context
+    #     # example: for c = ('SH', 'Short Hair), add object_list_SH as list of all short haired cats
+    #     for c in CATEGORY_CHOICES:
+    #         context['object_list_'+c[0]] = Item.objects.filter(category__exact=c[0])
+    #     return context
 
 class HomeViewSearchResult(ListView):
     model = Item

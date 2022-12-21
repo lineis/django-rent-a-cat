@@ -16,7 +16,7 @@ CATEGORY_CHOICES = (
     ('LH', 'Long Hair')
 )
 
-LABEL_CHOICES = (
+ENERGY_CHOICES = (
     ('LE', 'Low Energy'),
     ('ME', 'Medium Energy'),
     ('HE', 'High Energy')
@@ -57,7 +57,7 @@ class Item(models.Model):
     #discount_price = models.FloatField(blank=True, null=True)
     available = models.BooleanField()
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
-    label = models.CharField(choices=LABEL_CHOICES, max_length=2)
+    label = models.CharField(choices=ENERGY_CHOICES, max_length=2)
     size = models.CharField(choices=SIZE_CHOICES, max_length=1, default='NULL')
     gender = models.CharField(choices=GENDER_CHOICES, max_length=1, default='M')
     slug = models.SlugField()
