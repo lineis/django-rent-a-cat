@@ -6,17 +6,34 @@ from django.shortcuts import reverse
 from django_countries.fields import CountryField
 
 
+"""
+Declare categories and filters by which the entities can be distinguished.
+The main category is coat length, the additional categories are used as filters.
+"""
 CATEGORY_CHOICES = (
-    ('S', 'British Shorthair'),
-    ('SW', 'Sport wear'),
-    ('OW', 'Outwear')
+    ('SH', 'Short Hair'),
+    ('MH', 'Medium Hair'),
+    ('LH', 'Long Hair')
 )
 
 LABEL_CHOICES = (
-    ('P', 'primary'),
-    ('S', 'secondary'),
-    ('D', 'danger')
+    ('LE', 'Low Energy'),
+    ('ME', 'Medium Energy'),
+    ('HE', 'High Energy')
 )
+
+SIZE_CHOICES = (
+    ('S', 'Small Size'),
+    ('M', 'Medium Size'),
+    ('L', 'Large Size')
+)
+
+GENDER_CHOICES = (
+    ('M', 'Boy'),
+    ('F', 'Girl')
+)
+
+# color?
 
 ADDRESS_CHOICES = (
     ('B', 'Billing'),
@@ -36,10 +53,13 @@ class UserProfile(models.Model):
 
 class Item(models.Model):
     title = models.CharField(max_length=100)
-    price = models.FloatField()
-    discount_price = models.FloatField(blank=True, null=True)
+    #price = models.FloatField()
+    #discount_price = models.FloatField(blank=True, null=True)
+    available = models.BooleanField()
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
-    label = models.CharField(choices=LABEL_CHOICES, max_length=1)
+    label = models.CharField(choices=LABEL_CHOICES, max_length=2)
+    size = models.CharField(choices=SIZE_CHOICES, max_length=1, default='NULL')
+    gender = models.CharField(choices=GENDER_CHOICES, max_length=1, default='M')
     slug = models.SlugField()
     description = models.TextField()
     image = models.ImageField()
@@ -74,18 +94,19 @@ class OrderItem(models.Model):
         return f"{self.quantity} of {self.item.title}"
 
     def get_total_item_price(self):
-        return self.quantity * self.item.price
+        return 42 #self.quantity * self.item.price
 
     def get_total_discount_item_price(self):
-        return self.quantity * self.item.discount_price
+        return 42 #self.quantity * self.item.discount_price
 
     def get_amount_saved(self):
-        return self.get_total_item_price() - self.get_total_discount_item_price()
+        return 42 #self.get_total_item_price() - self.get_total_discount_item_price()
 
     def get_final_price(self):
-        if self.item.discount_price:
+        """if self.item.discount_price:
             return self.get_total_discount_item_price()
-        return self.get_total_item_price()
+        return self.get_total_item_price()"""
+        return 42
 
 
 class Order(models.Model):

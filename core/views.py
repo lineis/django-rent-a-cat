@@ -13,7 +13,7 @@ from django.utils import timezone
 from django.views.generic import ListView, DetailView, View
 
 from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
-from .models import Item, OrderItem, Order, Address, Payment, Coupon, Refund, UserProfile
+from .models import Item, OrderItem, Order, Address, Payment, Coupon, Refund, UserProfile, CATEGORY_CHOICES
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -35,6 +35,13 @@ def is_valid_form(values):
         if field == '':
             valid = False
     return valid
+
+# create trivial functions for views that are independent from models
+def display_how_to(request):
+    return render(request, 'how_to.html')
+
+def display_about_us(request):
+    return render(request, 'about_us.html')
 
 
 class CheckoutView(View):
@@ -350,6 +357,33 @@ class HomeView(ListView):
     paginate_by = 10
     template_name = "home.html"
 
+    def get_context_data(self, **kwargs):
+        """
+        Add extra context for filtering categories.
+        :param kwargs:
+        :return:
+        """
+        context = super(HomeView, self).get_context_data(**kwargs)
+        # query for every category add a new list to the context
+        # example: for c = ('SH', 'Short Hair), add object_list_SH as list of all short haired cats
+        for c in CATEGORY_CHOICES:
+            context['object_list_'+c[0]] = Item.objects.filter(category__exact=c[0])
+        return context
+
+class HomeViewSearchResult(ListView):
+    model = Item
+    paginate_by = 10
+    template_name = "home_search_result.html"
+
+    def get_context_data(self, **kwargs):
+        """
+        Change content according to search results.
+        :param kwargs:
+        :return:
+        """
+        context = super(HomeViewSearchResult, self).get_context_data(**kwargs)
+        context['search_result'] = Item.objects.filter(title__contains='Pep')
+        return context
 
 class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
