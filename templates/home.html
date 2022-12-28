@@ -42,8 +42,9 @@
                 {% csrf_token %}
                 <div class="btn-group mr-2" role="group">
                     {% for key, val in categories %}
-                        <input id="{{ key }}"  type="radio" value="{{ key }}" class="btn-check" name="category-filter" onchange="this.form.submit()" {% if choice == key %} checked {% endif %}/>
-                        <label for="{{ key }}" class="btn white-text">{{ val }}</label>
+                        <button type="submit" value="{{ key }}" name="category-filter" {% if choice == key %} class="btn btn-blue-grey active" {% else %} class="btn btn-outline-grey" {% endif %}>
+                            {{ val }}
+                        </button>
                     {% endfor %}
                 </div>
 
