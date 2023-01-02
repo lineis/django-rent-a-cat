@@ -46,6 +46,13 @@ def display_about_us(request):
 
 class CheckoutView(View):
     def get(self, *args, **kwargs):
+
+        # Time Period - get data from datepickers
+        from_date = self.request.GET.get('datepicker_from')
+        to_date = self.request.GET.get('datepicker_to')
+        print('FROM - TO', from_date, '-', to_date)
+
+
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
             form = CheckoutForm()
