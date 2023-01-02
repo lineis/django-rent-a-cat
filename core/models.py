@@ -68,6 +68,9 @@ class Item(models.Model):
     slug = models.SlugField()
     description = models.TextField()
     image = models.ImageField()
+    image2 = models.ImageField()
+    image3 = models.ImageField()
+    image4 = models.ImageField()
 
     def __str__(self):
         return self.title
