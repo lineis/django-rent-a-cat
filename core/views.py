@@ -1,3 +1,4 @@
+import datetime
 import random
 import string
 
@@ -11,6 +12,7 @@ from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, View
+from django import forms
 
 from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
 from .models import Item, OrderItem, Order, Address, Payment, Coupon, Refund, UserProfile, CATEGORY_CHOICES, SIZE_CHOICES, GENDER_CHOICES, ENERGY_CHOICES
@@ -47,15 +49,26 @@ def display_about_us(request):
 class CheckoutView(View):
     def get(self, *args, **kwargs):
 
-        # Time Period - get data from datepickers
-        from_date = self.request.GET.get('datepicker_from')
-        to_date = self.request.GET.get('datepicker_to')
-        print('FROM - TO', from_date, '-', to_date)
 
 
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
             form = CheckoutForm()
+
+            # Time Period - get data from datepickers
+            from_date = self.request.GET.get('from_date')
+            to_date = self.request.GET.get('datepicker_to')
+
+            date = forms.DateTimeField(
+                input_formats=['%d/%m/%Y %H:%M'],
+                widget=forms.DateTimeInput(attrs={
+                    'class': 'form-control datetimepicker-input',
+                    'data-target': '#datetimepicker1'
+                })
+            )
+
+            print(from_date, type(from_date), date, type(date))
+
             context = {
                 'form': form,
                 'couponform': CouponForm(),

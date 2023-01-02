@@ -40,16 +40,20 @@
           <form method="get" class="card-body">
               {% csrf_token %}
               <h3>Time Period</h3>
-
-              <div class="input-group date" id="datetimepicker1" data-target-input="nearest" style="width: 500px">
-                  <input type="text" name="datepicker_from" placeholder="From... (select date)"  class="form-control datetimepicker-input" data-target="#datetimepicker1" onchange="this.form.submit();"/>
-                  <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+              <div class="input-group date" style="width: 500px">
+                <label for="from_date"> From: &nbsp;</label>
+                  <input id="from_date"
+                         type="datetime-local"
+                         name="from_date"
+                         placeholder="From... (select date)"
+                         class="form-control datetimepicker-input"
+                         min="2017-06-01T08:30"
+                         max="2023-06-30T16:30"
+                         />
                   </div>
-              </div>
               &nbsp;&nbsp;
               <div class="input-group date" id="datetimepicker2" data-target-input="nearest" style="width: 500px">
-                  <input type="text" name="datepicker_to" placeholder="To... (select date)"  class="form-control datetimepicker-input" data-target="#datetimepicker2" onchange="this.form.submit();"/>
+                  <input type="text" name="datepicker_to" placeholder="To... (select date)"  class="form-control datetimepicker-input" data-target="#datetimepicker2"/>
                   <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                   </div>
