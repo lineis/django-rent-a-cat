@@ -40,28 +40,36 @@
           <form method="get" class="card-body">
               {% csrf_token %}
               <h3>Time Period</h3>
+              &nbsp;
               <div class="input-group date" style="width: 500px">
-                <label for="from_date"> From: &nbsp;</label>
-                  <input id="from_date"
-                         type="datetime-local"
-                         name="from_date"
-                         placeholder="From... (select date)"
-                         class="form-control datetimepicker-input"
-                         min="2017-06-01T08:30"
-                         max="2023-06-30T16:30"
-                         />
-                  </div>
-              &nbsp;&nbsp;
-              <div class="input-group date" id="datetimepicker2" data-target-input="nearest" style="width: 500px">
-                  <input type="text" name="datepicker_to" placeholder="To... (select date)"  class="form-control datetimepicker-input" data-target="#datetimepicker2"/>
-                  <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                  </div>
+                    <label for="from_date" style="margin-top: auto"> From: &nbsp;</label>
+                      <input id="from_date"
+                             type="datetime-local"
+                             name="from_date"
+                             class="form-control datetimepicker-input"
+                             min="{{ from_min_date }}"
+                             max="{{ from_max_date }}"
+                             value="{{ from_date_str }}"
+                             onchange="this.form.submit();"
+                             />
               </div>
-              &nbsp;&nbsp;
-              <div>
+              &nbsp;
+              <div class="input-group date" style="width: 500px">
+                    <label for="to_date" style="margin-top: auto"> To: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                      <input id="to_date"
+                             type="datetime-local"
+                             name="to_date"
+                             class="form-control datetimepicker-input"
+                             min="{{ to_min_date }}"
+                             max="{{ to_max_date }}"
+                             value="{{ to_date_str }}"
+                             onchange="this.form.submit();"
+                             />
+              </div>
+              <!--<div>
               <button style="float: right" class="btn btn-secondary btn-md waves-effect m-0" type="submit">SUBMIT</button>
-              </div>
+              </div>-->
+              &nbsp;&nbsp;
           </form>
           </div>
             <script>

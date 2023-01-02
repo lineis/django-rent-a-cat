@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 import random
 import string
 
@@ -15,7 +15,7 @@ from django.views.generic import ListView, DetailView, View
 from django import forms
 
 from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
-from .models import Item, OrderItem, Order, Address, Payment, Coupon, Refund, UserProfile, CATEGORY_CHOICES, SIZE_CHOICES, GENDER_CHOICES, ENERGY_CHOICES
+from .models import Item, OrderItem, Order, Address, Payment, Coupon, Refund, UserProfile, CATEGORY_CHOICES, SIZE_CHOICES, GENDER_CHOICES, ENERGY_CHOICES, MIN_RENTAL_HOURS, MAX_RENTAL_DAYS, MAX_PREORDER_DAYS, DATE_FORMAT
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -48,32 +48,67 @@ def display_about_us(request):
 
 class CheckoutView(View):
     def get(self, *args, **kwargs):
-
-
-
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
             form = CheckoutForm()
 
-            # Time Period - get data from datepickers
-            from_date = self.request.GET.get('from_date')
-            to_date = self.request.GET.get('datepicker_to')
+            """
+            TIME PERIOD
+            Get current date, the selected dates, and save them for the entities.
+            Also calculate the difference between the selected dates.
+            """
+            # Get general min/max dates (before input!) and convert to front-end format. These will act as placeholders in the datepickers.
+            now = dt.datetime.now()
+            from_min_date = now.strftime(DATE_FORMAT)
+            from_max_date = (now + dt.timedelta(days=MAX_PREORDER_DAYS)).strftime(DATE_FORMAT)
+            to_min_date = (now + dt.timedelta(hours=MIN_RENTAL_HOURS)).strftime(DATE_FORMAT)
+            print('to_min_date', to_min_date)
+            to_max_date = (now + dt.timedelta(days=MAX_PREORDER_DAYS) + dt.timedelta(hours=MIN_RENTAL_HOURS)).strftime(DATE_FORMAT)
 
-            date = forms.DateTimeField(
-                input_formats=['%d/%m/%Y %H:%M'],
-                widget=forms.DateTimeInput(attrs={
-                    'class': 'form-control datetimepicker-input',
-                    'data-target': '#datetimepicker1'
-                })
-            )
+            # Get selected dates from datepickers and convert them back into datetime format
+            from_date_str = self.request.GET.get('from_date')
+            to_date_str = self.request.GET.get('to_date')
 
-            print(from_date, type(from_date), date, type(date))
+            if from_date_str:
+                # convert back into datetime format
+                from_date = dt.datetime.strptime(from_date_str, DATE_FORMAT)
+
+                # depending on the selected rental start date, update min/max rental end date
+                to_min_date = (from_date + dt.timedelta(hours=MIN_RENTAL_HOURS)).strftime(DATE_FORMAT)
+                to_max_date = (from_date + dt.timedelta(days=MAX_RENTAL_DAYS)).strftime(DATE_FORMAT)
+
+                if to_date_str:
+                    # convert back into datetime format
+                    to_date = dt.datetime.strptime(to_date_str, DATE_FORMAT)
+
+                    # calculate rental duration
+                    if from_date < to_date:
+                        rental_duration = (to_date - from_date).total_seconds()/3600     # type = timedelta --> convert to hours
+                        order.rental_duration = rental_duration                          # update order entity
+                        # TODO: do this at a later stage... 'Order Now' Button + success page?
+                        # for cat in order.items.all():                                  # update ordered cat entities
+                        #    cat.set_unavailable()
+
+                        if rental_duration < MIN_RENTAL_HOURS or rental_duration > (MAX_RENTAL_DAYS*24):
+                            messages.info(self.request, f"Rental Duration must be between {MIN_RENTAL_HOURS} hours and {MAX_RENTAL_DAYS} days")
+
+                    else:
+                        messages.info(self.request, "From-Date must be smaller than To-Date")
+                        return redirect('core:checkout')
+
+
 
             context = {
                 'form': form,
                 'couponform': CouponForm(),
                 'order': order,
-                'DISPLAY_COUPON_FORM': True
+                'DISPLAY_COUPON_FORM': True,
+                'from_date_str': from_date_str,
+                'to_date_str': to_date_str,
+                'from_min_date': from_min_date,
+                'from_max_date': from_max_date,
+                'to_min_date': to_min_date,
+                'to_max_date': to_max_date
             }
 
             shipping_address_qs = Address.objects.filter(
