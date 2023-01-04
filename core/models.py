@@ -58,6 +58,7 @@ class UserProfile(models.Model):
 
 class Item(models.Model):
     title = models.CharField(max_length=100)
+    price = models.FloatField(default = 4)
     #price = models.FloatField() TODO: could be used for different hourly rates ?
     #discount_price = models.FloatField(blank=True, null=True)
     available = models.BooleanField(default=True)
@@ -67,6 +68,7 @@ class Item(models.Model):
     gender = models.CharField(choices=GENDER_CHOICES, max_length=1, default='M')
     slug = models.SlugField()
     description = models.TextField()
+    reviews = models.TextField(default="")
     image = models.ImageField()
     image2 = models.ImageField()
     image3 = models.ImageField()
@@ -107,7 +109,10 @@ class OrderItem(models.Model):
         return f"{self.quantity} of {self.item.title}"
 
     def get_total_item_price(self):
-        return 42 #self.quantity * self.item.price TODO: Clara - use rental duration and hourly rate?
+        return self.item.price #self.quantity * self.item.price TODO: Clara - use rental duration and hourly rate?
+
+    #def get_duration(self):
+    #    return get_rental_duration
 
     def get_total_discount_item_price(self):
         return 42 #self.quantity * self.item.discount_price
@@ -119,7 +124,7 @@ class OrderItem(models.Model):
         """if self.item.discount_price:
             return self.get_total_discount_item_price()
         return self.get_total_item_price()"""
-        return 42
+        return self.item.price
 
 
 class Order(models.Model):
@@ -127,9 +132,11 @@ class Order(models.Model):
                              on_delete=models.CASCADE)
     ref_code = models.CharField(max_length=20, blank=True, null=True)
     items = models.ManyToManyField(OrderItem)
-    start_date = models.DateTimeField(auto_now_add=True)
+    # start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField()
-    rental_duration = models.IntegerField(default=0)
+    #from_date = models.DateTimeField(default=False)
+    #to_date = models.DateTimeField(default=False)
+    rental_duration = models.FloatField(default=1.0)
     ordered = models.BooleanField(default=False)
     shipping_address = models.ForeignKey(
         'Address', related_name='shipping_address', on_delete=models.SET_NULL, blank=True, null=True)
@@ -165,6 +172,13 @@ class Order(models.Model):
         if self.coupon:
             total -= self.coupon.amount
         return total
+
+    #def set_from_date(self):
+
+    #def set_to_date(self):
+
+    def get_rental_duration(self):
+        return self.rental_duration
 
 
 class Address(models.Model):

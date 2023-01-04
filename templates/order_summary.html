@@ -11,9 +11,9 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Item title</th>
-            <th scope="col">Price</th>
+            <!--<th scope="col">Price</th>
             <th scope="col">Quantity</th>
-            <th scope="col">Total Item Price</th>
+            <th scope="col">Total Item Price</th>-->
         </tr>
         </thead>
         <tbody>
@@ -21,12 +21,12 @@
         <tr>
             <th scope="row">{{ forloop.counter }}</th>
             <td>{{ order_item.item.title }}</td>
-            <!-- <td>{{ order_item.item.price }}</td> -->
+            <!-- <td>{{ order_item.item.price }}</td> 
             <td>
                 <a href="{% url 'core:remove-single-item-from-cart' order_item.item.slug %}"><i class="fas fa-minus mr-2"></i></a>
                 {{ order_item.quantity }}
                 <a href="{% url 'core:add-to-cart' order_item.item.slug %}"><i class="fas fa-plus ml-2"></i></a>
-            </td>
+            </td>-->
             <td>
             <!--
             {% if order_item.item.discount_price %}
@@ -58,10 +58,10 @@
         </tr>
         {% endif %}
         {% if object.get_total %}
-        <tr>
+        <!--<tr>
             <td colspan="4"><b>Order Total</b></td>
             <td><b>${{ object.get_total }}</b></td>
-        </tr>
+        </tr>-->
         <tr>
             <td colspan="5">
             <a class='btn btn-warning float-right ml-2' href='/checkout/'>Proceed to checkout</a>

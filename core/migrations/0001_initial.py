@@ -47,7 +47,11 @@ class Migration(migrations.Migration):
                 ('label', models.CharField(choices=[('P', 'primary'), ('S', 'secondary'), ('D', 'danger')], max_length=1)),
                 ('slug', models.SlugField()),
                 ('description', models.TextField()),
+                ('reviews', models.TextField()),
                 ('image', models.ImageField(upload_to='')),
+                ('image2', models.ImageField(upload_to='')),
+                ('image3', models.ImageField(upload_to='')),
+                ('image4', models.ImageField(upload_to='')),
             ],
         ),
         migrations.CreateModel(
@@ -55,8 +59,10 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('ref_code', models.CharField(max_length=20)),
-                ('start_date', models.DateTimeField(auto_now_add=True)),
+                # ('start_date', models.DateTimeField(auto_now_add=True)),
                 ('ordered_date', models.DateTimeField()),
+                #('from_date', models.DateTimeField(default=False)),
+                #('to_date', models.DateTimeField(default=False)),
                 ('ordered', models.BooleanField(default=False)),
                 ('being_delivered', models.BooleanField(default=False)),
                 ('received', models.BooleanField(default=False)),
