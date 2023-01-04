@@ -25,7 +25,7 @@
       <nav class="navbar navbar-expand-lg navbar-dark mdb-color lighten-3 mt-3 mb-5">
 
         <!-- Navbar brand -->
-        <span class="navbar-brand">Coat Length: </span>
+        <span class="navbar-brand dark-grey-text">Coat Length: </span>
 
         <!-- Collapse button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
@@ -42,8 +42,9 @@
                 {% csrf_token %}
                 <div class="btn-group mr-2" role="group">
                     {% for key, val in categories %}
-                        <input id="{{ key }}"  type="radio" value="{{ key }}" class="btn-check" name="category-filter" onchange="this.form.submit()" {% if choice == key %} checked {% endif %}/>
-                        <label for="{{ key }}" class="btn white-text">{{ val }}</label>
+                        <button type="submit" value="{{ key }}" name="category-filter" {% if choice == key %} class="btn btn-blue-grey active" {% else %} class="btn btn-outline-grey" {% endif %}>
+                            {{ val }}
+                        </button>
                     {% endfor %}
                 </div>
 
@@ -71,19 +72,25 @@
           <!-- FILTERS -->
           <form method="get">
             {% csrf_token %}
-            <select id="filter-size" class="form-control" name="size-filter" onchange="this.form.submit();">
+            <select id="filter-size" class="form-control btn-outline-grey" name="size-filter" onchange="this.form.submit();">
                 <option value="ALL"> Filter by size</option>
                 {% for key, val in sizes %}
-                    <option value="{{ key }}" {% if choice == key %} selected=selected {% endif %}>{{ val }}</option>
+                    <option value="{{ key }}" {% if choice == key %} selected=selected {% endif %}>
+                        {{ val }}
+                    </option>
                 {% endfor %}
             </select>
           </form>
+      {% comment %} protected spacing {% endcomment %}
+      &nbsp;&nbsp;
           <form method="get">
             {% csrf_token %}
-            <select id="filter-attribute" class="form-control" name="attribute-filter" onchange="this.form.submit();">
+            <select id="filter-attribute" class="form-control btn-outline-grey" name="attribute-filter" onchange="this.form.submit();">
                 <option value="ALL"> Filter by energy</option>
                 {% for key, val in energies %}
-                    <option value="{{ key }}" {% if choice == key %} selected=selected {% endif %}>{{ val }}</option>
+                    <option value="{{ key }}" {% if choice == key %} selected=selected {% endif %}>
+                        {{ val }}
+                    </option>
                 {% endfor %}
             </select>
         </form>

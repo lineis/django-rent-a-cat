@@ -33,13 +33,18 @@ GENDER_CHOICES = (
     ('F', 'Girl')
 )
 
-# color?
-
 ADDRESS_CHOICES = (
     ('B', 'Billing'),
     ('S', 'Shipping'),
 )
 
+# define global constants for min or max durations
+MIN_RENTAL_HOURS = 5                # minimum rental duration in hours
+MAX_RENTAL_DAYS = 7                 # maximum rental duration in days
+MAX_PREORDER_DAYS = 14              # maximum days a cat can be ordered in advance (cat may not be available anymore!)
+
+# date format that is used in front-end
+DATE_FORMAT = '%Y-%m-%dT%H:%M'
 
 class UserProfile(models.Model):
     user = models.OneToOneField(
@@ -53,9 +58,9 @@ class UserProfile(models.Model):
 
 class Item(models.Model):
     title = models.CharField(max_length=100)
-    #price = models.FloatField()
+    #price = models.FloatField() TODO: could be used for different hourly rates ?
     #discount_price = models.FloatField(blank=True, null=True)
-    available = models.BooleanField()
+    available = models.BooleanField(default=True)
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
     label = models.CharField(choices=ENERGY_CHOICES, max_length=2)
     size = models.CharField(choices=SIZE_CHOICES, max_length=1, default='NULL')
@@ -63,6 +68,9 @@ class Item(models.Model):
     slug = models.SlugField()
     description = models.TextField()
     image = models.ImageField()
+    image2 = models.ImageField()
+    image3 = models.ImageField()
+    image4 = models.ImageField()
 
     def __str__(self):
         return self.title
@@ -82,6 +90,11 @@ class Item(models.Model):
             'slug': self.slug
         })
 
+    def set_unavailable(self):
+        self.available = False
+
+    def set_available(self):
+        self.available = True
 
 class OrderItem(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -94,7 +107,7 @@ class OrderItem(models.Model):
         return f"{self.quantity} of {self.item.title}"
 
     def get_total_item_price(self):
-        return 42 #self.quantity * self.item.price
+        return 42 #self.quantity * self.item.price TODO: Clara - use rental duration and hourly rate?
 
     def get_total_discount_item_price(self):
         return 42 #self.quantity * self.item.discount_price
@@ -116,6 +129,7 @@ class Order(models.Model):
     items = models.ManyToManyField(OrderItem)
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField()
+    rental_duration = models.IntegerField(default=0)
     ordered = models.BooleanField(default=False)
     shipping_address = models.ForeignKey(
         'Address', related_name='shipping_address', on_delete=models.SET_NULL, blank=True, null=True)
