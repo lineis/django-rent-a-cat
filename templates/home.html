@@ -73,7 +73,7 @@
           <form method="get">
             {% csrf_token %}
             <select id="filter-size" class="form-control btn-outline-grey" name="size-filter" onchange="this.form.submit();">
-                <option value="ALL"> Filter by size</option>
+                <option value="ALL" onclick='window.location.href="/home"'>Filter by size</option>
                 {% for key, val in sizes %}
                     <option value="{{ key }}" {% if choice == key %} selected=selected {% endif %}>
                         {{ val }}
@@ -127,13 +127,14 @@
                   </div>
 
                   <div class="card-body text-center">
-                    <a href="" class="grey-text">
-                      <h5>{{ item.get_category_display }}</h5>
+                    <a href="" class="dark-grey-text">
+                      <h3>{{ item.title }}</h3>
                     </a>
                     <h5>
                       <strong>
-                        <a href="{{ item.get_absolute_url }}" class="dark-grey-text">{{ item.title }}
+                        <a href="{{ item.get_absolute_url }}" class="dark-grey-text">
                           <!-- <span class="badge badge-pill {{ item.get_label_display }}-color">NEW</span> -->
+                          <span class="badge badge-pill purple">{{ item.get_category_display }}</span>
                           <span class="badge badge-pill primary-color">{{ item.get_size_display }}</span>
                           <span class="badge badge-pill secondary-color">{{ item.get_label_display }}</span>
                           <span class="badge badge-pill btn-dark">{{ item.get_gender_display }}</span>

@@ -104,15 +104,21 @@ class OrderItem(models.Model):
     ordered = models.BooleanField(default=False)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
-
+    
     def __str__(self):
         return f"{self.quantity} of {self.item.title}"
 
     def get_total_item_price(self):
         return self.item.price #self.quantity * self.item.price TODO: Clara - use rental duration and hourly rate?
 
-    #def get_duration(self):
-    #    return get_rental_duration
+    def set_order(self, order):
+        self.order = order
+
+    def get_duration(self):
+        if(hasattr(self, 'order')):
+            return self.order.get_rental_duration()
+        else:
+            return 1
 
     def get_total_discount_item_price(self):
         return 42 #self.quantity * self.item.discount_price
@@ -124,8 +130,8 @@ class OrderItem(models.Model):
         """if self.item.discount_price:
             return self.get_total_discount_item_price()
         return self.get_total_item_price()"""
-        return self.item.price
-
+        #return 1
+        return self.item.price * self.get_duration()
 
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -136,7 +142,7 @@ class Order(models.Model):
     ordered_date = models.DateTimeField()
     #from_date = models.DateTimeField(default=False)
     #to_date = models.DateTimeField(default=False)
-    rental_duration = models.FloatField(default=1.0)
+    # rental_duration = models.IntegerField()
     ordered = models.BooleanField(default=False)
     shipping_address = models.ForeignKey(
         'Address', related_name='shipping_address', on_delete=models.SET_NULL, blank=True, null=True)
@@ -172,10 +178,6 @@ class Order(models.Model):
         if self.coupon:
             total -= self.coupon.amount
         return total
-
-    #def set_from_date(self):
-
-    #def set_to_date(self):
 
     def get_rental_duration(self):
         return self.rental_duration

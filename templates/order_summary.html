@@ -21,12 +21,14 @@
         <tr>
             <th scope="row">{{ forloop.counter }}</th>
             <td>{{ order_item.item.title }}</td>
+
             <!-- <td>{{ order_item.item.price }}</td> 
             <td>
                 <a href="{% url 'core:remove-single-item-from-cart' order_item.item.slug %}"><i class="fas fa-minus mr-2"></i></a>
                 {{ order_item.quantity }}
                 <a href="{% url 'core:add-to-cart' order_item.item.slug %}"><i class="fas fa-plus ml-2"></i></a>
             </td>-->
+            
             <td>
             <!--
             {% if order_item.item.discount_price %}
@@ -45,30 +47,20 @@
         <tr>
             <td colspan='5'>Your cart is empty</td>
         </tr>
-        <tr>
-            <td colspan="5">
-            <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
-            </td>
-        </tr>
         {% endfor %}
-        {% if object.coupon %}
+        <!--{% if object.coupon %}
         <tr>
             <td colspan="4"><b>Coupon</b></td>
             <td><b>-${{ object.coupon.amount }}</b></td>
         </tr>
-        {% endif %}
-        {% if object.get_total %}
-        <!--<tr>
-            <td colspan="4"><b>Order Total</b></td>
-            <td><b>${{ object.get_total }}</b></td>
-        </tr>-->
+        {% endif %}-->
         <tr>
             <td colspan="5">
             <a class='btn btn-warning float-right ml-2' href='/checkout/'>Proceed to checkout</a>
             <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
             </td>
         </tr>
-        {% endif %}
+        
         </tbody>
     </table>
 
