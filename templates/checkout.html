@@ -31,15 +31,13 @@
 
 
     <div class="container wow fadeIn">
-      <h2 class="my-5 h2 text-center">Checkout form</h2>
+      <h2 class="my-5 h2 text-center text-muted">Checkout form</h2>
       <div class="row">
         <div class="col-md-8 mb-4">
-
-          {% comment %} Time Period - Dates Input {% endcomment %}
           <div class="card">
           <form method="get" class="card-body">
               {% csrf_token %}
-              <h3>Time Period</h3>
+              <h4 class="text-muted">Time Period</h4>
               &nbsp;
               <div class="input-group date" style="width: 500px">
                     <label for="from_date" style="margin-top: auto"> From: &nbsp;</label>
@@ -73,8 +71,10 @@
               </div>-->
               &nbsp;&nbsp;
           </form>
-              <button class="btn btn-secondary btn-lg btn-block">Order now</button>
+          
+              <!--button class="btn btn-secondary btn-lg btn-block">Order now</button-->
           </div>
+          {% include "payment_form.html" %}
             <script>
               $(function () {
                 $("#datetimepicker1").datetimepicker();
