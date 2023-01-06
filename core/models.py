@@ -111,11 +111,9 @@ class OrderItem(models.Model):
     def get_total_item_price(self):
         return self.item.price #self.quantity * self.item.price TODO: Clara - use rental duration and hourly rate?
 
-    def set_order(self, order):
-        self.order = order
-
     def get_duration(self):
-        if(hasattr(self, 'order')):
+        #if(hasattr(self, 'order')):
+        if(True):
             return self.order.get_rental_duration()
         else:
             return 1

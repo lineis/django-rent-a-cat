@@ -85,6 +85,7 @@ class CheckoutView(View):
                     if from_date < to_date:
                         rental_duration = (to_date - from_date).total_seconds()/3600     # type = timedelta --> convert to hours
                         order.rental_duration = rental_duration                          # update order entity
+                        order.save()
                         # TODO: do this at a later stage... 'Order Now' Button + success page?
                         # for cat in order.items.all():                                  # update ordered cat entities
                         #    cat.set_unavailable()
@@ -513,7 +514,8 @@ def add_to_cart(request, slug):
         ordered_date = timezone.now()
         order = Order.objects.create(
             user=request.user, ordered_date=ordered_date)
-    order_item.set_order(order)
+    order_item.order=order
+    order_item.save()
     order.items.add(order_item)
     messages.info(request, "This item was added to your cart.")
     return redirect("core:order-summary")
