@@ -15,7 +15,7 @@ from django.views.generic import ListView, DetailView, View
 from django import forms
 
 from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
-from .models import Item, OrderItem, Order, Address, Payment, Coupon, Refund, UserProfile, CATEGORY_CHOICES, SIZE_CHOICES, GENDER_CHOICES, ENERGY_CHOICES, MIN_RENTAL_HOURS, MAX_RENTAL_DAYS, MAX_PREORDER_DAYS, DATE_FORMAT
+from .models import Item, OrderItem, Order, Address, Payment, Coupon, Refund, UserProfile, CATEGORY_CHOICES, SIZE_CHOICES, GENDER_CHOICES, ENERGY_CHOICES, MIN_RENTAL_HOURS, MAX_RENTAL_DAYS, MAX_PREORDER_DAYS, DATE_FORMAT, DEFAULT_RENTAL_DURATION
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -96,8 +96,6 @@ class CheckoutView(View):
                     else:
                         messages.info(self.request, "From-Date must be smaller than To-Date")
                         return redirect('core:checkout')
-
-
 
             context = {
                 'form': form,
@@ -507,6 +505,7 @@ def add_to_cart(request, slug):
         ordered=False
     )
     print('I am here')
+    print(order_item.__dict__)
     order_qs = Order.objects.filter(user=request.user, ordered=False)
     if order_qs.exists():
         order = order_qs[0]
@@ -514,9 +513,12 @@ def add_to_cart(request, slug):
         ordered_date = timezone.now()
         order = Order.objects.create(
             user=request.user, ordered_date=ordered_date)
-    order_item.order=order
-    order_item.save()
+    #order_item.order=order
+    #order_item.save()
+    #print(order_item.__dict__)
     order.items.add(order_item)
+    #for item in order.items.all():
+    #    print(item.__dict__)
     messages.info(request, "This item was added to your cart.")
     return redirect("core:order-summary")
 
@@ -540,6 +542,9 @@ def remove_from_cart(request, slug):
             order.items.remove(order_item)
             order_item.delete()
             messages.info(request, "This item was removed from your cart.")
+            if len(order.items.all()) == 0:
+                order.rental_duration=DEFAULT_RENTAL_DURATION
+                order.save()
             return redirect("core:order-summary")
         else:
             messages.info(request, "This item was not in your cart")

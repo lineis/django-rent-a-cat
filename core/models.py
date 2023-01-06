@@ -42,6 +42,7 @@ ADDRESS_CHOICES = (
 MIN_RENTAL_HOURS = 5                # minimum rental duration in hours
 MAX_RENTAL_DAYS = 7                 # maximum rental duration in days
 MAX_PREORDER_DAYS = 14              # maximum days a cat can be ordered in advance (cat may not be available anymore!)
+DEFAULT_RENTAL_DURATION = 1
 
 # date format that is used in front-end
 DATE_FORMAT = '%Y-%m-%dT%H:%M'
@@ -114,7 +115,7 @@ class OrderItem(models.Model):
     def get_duration(self):
         #if(hasattr(self, 'order')):
         if(True):
-            return self.order.get_rental_duration()
+            return self.order_set.all()[0].get_rental_duration()
         else:
             return 1
 
@@ -140,7 +141,7 @@ class Order(models.Model):
     ordered_date = models.DateTimeField()
     #from_date = models.DateTimeField(default=False)
     #to_date = models.DateTimeField(default=False)
-    # rental_duration = models.IntegerField()
+    rental_duration = models.IntegerField(default=DEFAULT_RENTAL_DURATION)
     ordered = models.BooleanField(default=False)
     shipping_address = models.ForeignKey(
         'Address', related_name='shipping_address', on_delete=models.SET_NULL, blank=True, null=True)
