@@ -1,3 +1,4 @@
+import datetime as dt
 import random
 import string
 
@@ -11,9 +12,10 @@ from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, View
+from django import forms
 
 from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm
-from .models import Item, OrderItem, Order, Address, Payment, Coupon, Refund, UserProfile
+from .models import Item, OrderItem, Order, Address, Payment, Coupon, Refund, UserProfile, CATEGORY_CHOICES, SIZE_CHOICES, GENDER_CHOICES, ENERGY_CHOICES, MIN_RENTAL_HOURS, MAX_RENTAL_DAYS, MAX_PREORDER_DAYS, DATE_FORMAT, DEFAULT_RENTAL_DURATION
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -36,17 +38,76 @@ def is_valid_form(values):
             valid = False
     return valid
 
+# create trivial functions for views that are independent from models
+def display_how_to(request):
+    return render(request, 'how_to.html')
+
+def display_about_us(request):
+    return render(request, 'about_us.html')
+
 
 class CheckoutView(View):
     def get(self, *args, **kwargs):
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
             form = CheckoutForm()
+
+            """
+            TIME PERIOD
+            Get current date, the selected dates, and save them for the entities.
+            Also calculate the difference between the selected dates.
+            """
+            # Get general min/max dates (before input!) and convert to front-end format. These will act as placeholders in the datepickers.
+            now = dt.datetime.now()
+            from_min_date = now.strftime(DATE_FORMAT)
+            from_max_date = (now + dt.timedelta(days=MAX_PREORDER_DAYS)).strftime(DATE_FORMAT)
+            to_min_date = (now + dt.timedelta(hours=MIN_RENTAL_HOURS)).strftime(DATE_FORMAT)
+            print('to_min_date', to_min_date)
+            to_max_date = (now + dt.timedelta(days=MAX_PREORDER_DAYS) + dt.timedelta(hours=MIN_RENTAL_HOURS)).strftime(DATE_FORMAT)
+
+            # Get selected dates from datepickers and convert them back into datetime format
+            from_date_str = self.request.GET.get('from_date')
+            to_date_str = self.request.GET.get('to_date')
+
+            if from_date_str:
+                # convert back into datetime format
+                from_date = dt.datetime.strptime(from_date_str, DATE_FORMAT)
+
+                # depending on the selected rental start date, update min/max rental end date
+                to_min_date = (from_date + dt.timedelta(hours=MIN_RENTAL_HOURS)).strftime(DATE_FORMAT)
+                to_max_date = (from_date + dt.timedelta(days=MAX_RENTAL_DAYS)).strftime(DATE_FORMAT)
+
+                if to_date_str:
+                    # convert back into datetime format
+                    to_date = dt.datetime.strptime(to_date_str, DATE_FORMAT)
+
+                    # calculate rental duration
+                    if from_date < to_date:
+                        rental_duration = (to_date - from_date).total_seconds()/3600     # type = timedelta --> convert to hours
+                        order.rental_duration = rental_duration                          # update order entity
+                        order.save()
+                        # TODO: do this at a later stage... 'Order Now' Button + success page?
+                        # for cat in order.items.all():                                  # update ordered cat entities
+                        #    cat.set_unavailable()
+
+                        if rental_duration < MIN_RENTAL_HOURS or rental_duration > (MAX_RENTAL_DAYS*24):
+                            messages.info(self.request, f"Rental Duration must be between {MIN_RENTAL_HOURS} hours and {MAX_RENTAL_DAYS} days")
+
+                    else:
+                        messages.info(self.request, "From-Date must be smaller than To-Date")
+                        return redirect('core:checkout')
+
             context = {
                 'form': form,
                 'couponform': CouponForm(),
                 'order': order,
-                'DISPLAY_COUPON_FORM': True
+                'DISPLAY_COUPON_FORM': True,
+                'from_date_str': from_date_str,
+                'to_date_str': to_date_str,
+                'from_min_date': from_min_date,
+                'from_max_date': from_max_date,
+                'to_min_date': to_min_date,
+                'to_max_date': to_max_date
             }
 
             shipping_address_qs = Address.objects.filter(
@@ -80,7 +141,7 @@ class CheckoutView(View):
                 use_default_shipping = form.cleaned_data.get(
                     'use_default_shipping')
                 if use_default_shipping:
-                    print("Using the defualt shipping address")
+                    print("Using the default personal address")
                     address_qs = Address.objects.filter(
                         user=self.request.user,
                         address_type='S',
@@ -92,10 +153,10 @@ class CheckoutView(View):
                         order.save()
                     else:
                         messages.info(
-                            self.request, "No default shipping address available")
+                            self.request, "No default personal address available")
                         return redirect('core:checkout')
                 else:
-                    print("User is entering a new shipping address")
+                    print("User is entering a new personal address")
                     shipping_address1 = form.cleaned_data.get(
                         'shipping_address')
                     shipping_address2 = form.cleaned_data.get(
@@ -126,7 +187,7 @@ class CheckoutView(View):
 
                     else:
                         messages.info(
-                            self.request, "Please fill in the required shipping address fields")
+                            self.request, "Please fill in the required personal address fields")
 
                 use_default_billing = form.cleaned_data.get(
                     'use_default_billing')
@@ -143,7 +204,7 @@ class CheckoutView(View):
                     order.save()
 
                 elif use_default_billing:
-                    print("Using the defualt billing address")
+                    print("Using the defualt cat address")
                     address_qs = Address.objects.filter(
                         user=self.request.user,
                         address_type='B',
@@ -155,10 +216,10 @@ class CheckoutView(View):
                         order.save()
                     else:
                         messages.info(
-                            self.request, "No default billing address available")
+                            self.request, "No default cat address available")
                         return redirect('core:checkout')
                 else:
-                    print("User is entering a new billing address")
+                    print("User is entering a new cat address")
                     billing_address1 = form.cleaned_data.get(
                         'billing_address')
                     billing_address2 = form.cleaned_data.get(
@@ -189,7 +250,7 @@ class CheckoutView(View):
 
                     else:
                         messages.info(
-                            self.request, "Please fill in the required billing address fields")
+                            self.request, "Please fill in the required cat address fields")
 
                 payment_option = form.cleaned_data.get('payment_option')
 
@@ -204,7 +265,6 @@ class CheckoutView(View):
         except ObjectDoesNotExist:
             messages.warning(self.request, "You do not have an active order")
             return redirect("core:order-summary")
-
 
 class PaymentView(View):
     def get(self, *args, **kwargs):
@@ -232,7 +292,7 @@ class PaymentView(View):
             return render(self.request, "payment.html", context)
         else:
             messages.warning(
-                self.request, "You have not added a billing address")
+                self.request, "You have not added a cat address")
             return redirect("core:checkout")
 
     def post(self, *args, **kwargs):
@@ -344,12 +404,58 @@ class PaymentView(View):
         messages.warning(self.request, "Invalid data received")
         return redirect("/payment/stripe/")
 
-
 class HomeView(ListView):
     model = Item
     paginate_by = 10
     template_name = "home.html"
 
+    def get_context_data(self, **kwargs):
+
+        # get items and current context
+        items = Item.objects.all()
+        context = super(HomeView, self).get_context_data(**kwargs)
+        choice = 'NULL'
+
+        # add attributes to context
+        context['categories'] = CATEGORY_CHOICES
+        context['sizes'] = SIZE_CHOICES
+        context['energies'] = ENERGY_CHOICES
+
+        # Category Filter
+        category_filter = self.request.GET.get('category-filter')
+        if category_filter:
+            choice = category_filter
+            items = items.filter(category__exact=category_filter)
+
+        # Size Filter
+        size_filter = self.request.GET.get('size-filter')
+        if size_filter:
+            choice = size_filter
+            items = items.filter(size__exact=size_filter)
+
+        # Attribute Filter (label / energy)
+        attribute_filter = self.request.GET.get('attribute-filter')
+        if attribute_filter:
+            choice = attribute_filter
+            items = items.filter(label__exact=attribute_filter)
+
+        # add choice to context so that it can be tracked in front-end
+        context['choice'] = choice
+
+        # Refresh items in context
+        context['object_list'] = items
+
+        return context
+
+class HomeViewSearchResult(ListView):
+    model = Item
+    paginate_by = 10
+    template_name = "home_search_result.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeViewSearchResult, self).get_context_data(**kwargs)
+        context['search_result'] = Item.objects.filter(title__contains='Pep')
+        return context
 
 class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
@@ -377,26 +483,18 @@ def add_to_cart(request, slug):
         user=request.user,
         ordered=False
     )
+    print('I am here')
+    print(order_item.__dict__)
     order_qs = Order.objects.filter(user=request.user, ordered=False)
     if order_qs.exists():
         order = order_qs[0]
-        # check if the order item is in the order
-        if order.items.filter(item__slug=item.slug).exists():
-            order_item.quantity += 1
-            order_item.save()
-            messages.info(request, "This item quantity was updated.")
-            return redirect("core:order-summary")
-        else:
-            order.items.add(order_item)
-            messages.info(request, "This item was added to your cart.")
-            return redirect("core:order-summary")
     else:
         ordered_date = timezone.now()
         order = Order.objects.create(
             user=request.user, ordered_date=ordered_date)
-        order.items.add(order_item)
-        messages.info(request, "This item was added to your cart.")
-        return redirect("core:order-summary")
+    order.items.add(order_item)
+    messages.info(request, "This item was added to your cart.")
+    return redirect("core:order-summary")
 
 
 @login_required
@@ -418,6 +516,9 @@ def remove_from_cart(request, slug):
             order.items.remove(order_item)
             order_item.delete()
             messages.info(request, "This item was removed from your cart.")
+            if len(order.items.all()) == 0:
+                order.rental_duration=DEFAULT_RENTAL_DURATION
+                order.save()
             return redirect("core:order-summary")
         else:
             messages.info(request, "This item was not in your cart")

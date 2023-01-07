@@ -1,14 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+  <head>
+      {% include "carousel.html" %}
+  </head>
+
+<script>
+    function showCategory(category_string) {
+        document.getElementById(category_string).style.display = 'block';
+        document.getElementById('nav-item-' + category_string).classList.add("active");
+    }
+    function hideCategory(category_string) {
+        document.getElementById(category_string).style.display = 'none';
+        document.getElementById('nav-item-' + category_string).classList.remove("active");
+    }
+</script>
+
   <main>
     <div class="container">
+
 
       <!--Navbar-->
       <nav class="navbar navbar-expand-lg navbar-dark mdb-color lighten-3 mt-3 mb-5">
 
         <!-- Navbar brand -->
-        <span class="navbar-brand">Categories:</span>
+        <span class="navbar-brand dark-grey-text">Coat Length: </span>
 
         <!-- Collapse button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
@@ -17,89 +34,134 @@
         </button>
 
         <!-- Collapsible content -->
-        <div class="collapse navbar-collapse" id="basicExampleNav">
+        <form class="collapse navbar-collapse" id="basicExampleNav" method="get">
 
-          <!-- Links -->
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">All
-                <span class="sr-only">(current)</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">British Shorthair</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Sport wears</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Outwears</a>
-            </li>
+          <!-- Categories -->
+            <ul class="navbar-nav mr-auto">
 
-          </ul>
-          <!-- Links -->
+                {% csrf_token %}
+                <div class="btn-group mr-2" role="group">
+                    {% for key, val in categories %}
+                        <button type="submit" value="{{ key }}" name="category-filter" {% if choice == key %} class="btn btn-blue-grey active" {% else %} class="btn btn-outline-grey" {% endif %}>
+                            {{ val }}
+                        </button>
+                    {% endfor %}
+                </div>
 
-          <form class="form-inline">
-            <div class="md-form my-0">
-              <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-            </div>
+                {% comment %} OLD FILTERS
+                <li id="nav-item-ALL" class="nav-item active">
+                  <a class="nav-link" href="#ALL" onclick="showCategory('ALL');hideCategory('SH');hideCategory('MH');hideCategory('LH')">All
+                    <span class="sr-only">(current)</span>
+                  </a>
+                </li>
+                <li id="nav-item-SH" class="nav-item">
+                  <a class="nav-link" href="#SH" onclick="showCategory('SH');hideCategory('MH');hideCategory('LH');hideCategory('ALL')">Short Hair</a>
+                </li>
+                <li id="nav-item-MH" class="nav-item">
+                  <a class="nav-link" href="#MH" onclick="showCategory('MH');hideCategory('SH');hideCategory('LH');hideCategory('ALL')">Medium Hair</a>
+                </li>
+                <li id="nav-item-LH" class="nav-item">
+                  <a class="nav-link" href="#LH" onclick="showCategory('LH');hideCategory('SH');hideCategory('MH');hideCategory('ALL')">Long Hair</a>
+                </li>
+                {% endcomment %}
+
+            </ul>
+
+        </form>
+
+          <!-- FILTERS -->
+          <form method="get">
+            {% csrf_token %}
+            <select id="filter-size" class="form-control btn-outline-grey" name="size-filter" onchange="this.form.submit();">
+                <option value="ALL" onclick='window.location.href="/home"'>Filter by size</option>
+                {% for key, val in sizes %}
+                    <option value="{{ key }}" {% if choice == key %} selected=selected {% endif %}>
+                        {{ val }}
+                    </option>
+                {% endfor %}
+            </select>
           </form>
-        </div>
-        <!-- Collapsible content -->
+      {% comment %} protected spacing {% endcomment %}
+      &nbsp;&nbsp;
+          <form method="get">
+            {% csrf_token %}
+            <select id="filter-attribute" class="form-control btn-outline-grey" name="attribute-filter" onchange="this.form.submit();">
+                <option value="ALL"> Filter by energy</option>
+                {% for key, val in energies %}
+                    <option value="{{ key }}" {% if choice == key %} selected=selected {% endif %}>
+                        {{ val }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+        {% comment %}
+          TODO: search function?
+          <form class="form-inline">
+            <form class="md-form my-0" method="POST" action="home/search-result/">
+                {% csrf_token %}
+              <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                <input type="submit" value="Search">
+            </form>
+          </form>
+        {% endcomment %}
 
       </nav>
       <!--/.Navbar-->
 
-      <!--Section: Products v.3-->
-      <section class="text-center mb-4">
+      <!--Section: Items -->
+      <section id="ALL" class="text-center mb-4">
 
         <div class="row wow fadeIn">
 
           {% for item in object_list %}
-          <div class="col-lg-3 col-md-6 mb-4">
 
-            <div class="card">
+              <div class="col-lg-3 col-md-6 mb-4">
 
-              <div class="view overlay">
-                {% comment %} <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12.jpg" class="card-img-top" {% endcomment %}
-                <img src="{{ item.image.url }}" class="card-img-top">
-                <a href="{{ item.get_absolute_url }}">
-                  <div class="mask rgba-white-slight"></div>
-                </a>
-              </div>
+                <div class="card">
 
-              <div class="card-body text-center">
-                <a href="" class="grey-text">
-                  <h5>{{ item.get_category_display }}</h5>
-                </a>
-                <h5>
-                  <strong>
-                    <a href="{{ item.get_absolute_url }}" class="dark-grey-text">{{ item.title }}
-                      <span class="badge badge-pill {{ item.get_label_display }}-color">NEW</span>
+                  <div class="view overlay">
+                    <img src="{{ item.image.url }}" class="card-img-top">
+                    <a href="{{ item.get_absolute_url }}">
+                      <div class="mask rgba-white-slight"></div>
                     </a>
-                  </strong>
-                </h5>
+                  </div>
 
-                <h4 class="font-weight-bold blue-text">
-                  <strong>$
-                  {% if item.discount_price %}
-                  {{ item.discount_price }}
-                  {% else %}
-                  {{ item.price }}
-                  {% endif %}
-                  </strong>
-                </h4>
+                  <div class="card-body text-center">
+                    <a href="" class="dark-grey-text">
+                      <h3>{{ item.title }}</h3>
+                    </a>
+                    <h5>
+                      <strong>
+                        <a href="{{ item.get_absolute_url }}" class="dark-grey-text">
+                          <span class="badge badge-pill purple">{{ item.get_category_display }}</span>
+                          <span class="badge badge-pill primary-color">{{ item.get_size_display }}</span>
+                          <span class="badge badge-pill secondary-color">{{ item.get_label_display }}</span>
+                          <span class="badge badge-pill btn-dark">{{ item.get_gender_display }}</span>
+                        </a>
+                      </strong>
+                    </h5>
+
+                    {% if item.available %}
+                    <h4 class="font-weight-bold green-text">
+                        <strong>AVAILABLE</strong>
+                    </h4>
+                    {% else %}
+                    <h4 class="font-weight-bold blue-grey-text">
+                      <strong>TAKEN</strong>
+                    </h4>
+                    {% endif %}
+
+                  </div>
+
+                </div>
 
               </div>
 
-            </div>
-
-          </div>
           {% endfor %}
         </div>
 
       </section>
-      <!--Section: Products v.3-->
+      <!--Section: Items -->
 
       <!--Pagination-->
 
