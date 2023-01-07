@@ -1,3 +1,23 @@
+
+## Project Description
+
+This website has been implemented within the Information Systems Development course 2022/23 at University of Liechtenstein. It is meant to be a genuine idea that we turned into something real and thereby gained technical knowledge in both Python and Django. The goal of this online service is to provide a platform where animal shelters (or private persons) can post their cats and potential adopters can lend ("rent") them for a specific period of time. This facilitates close human-animal engagement and getting to know the cat better, which may result in further lendings or even an adoption. We believe that this concept has beneficial effects on the mental health of people (especially those who cannot permanently own a cat) while obviously also doing something good for the animals.  
+  
+> (TODO: insert top banner from finished website?)
+
+---
+
+## Technical Environment
+
+In order to realise our project, we used a simple e-commerce skeleton from [JustDjango](https://justdjango.com/?utm_source=github&utm_medium=logo) that uses (the free version of) a [Bootstrap Template](https://mdbootstrap.com/freebies/jquery/e-commerce/).  
+The environment follows a Django-typical structure. The back-end classes `*.py` are located in `core/` where you will e.g. find the entities (`models.py`), the URL patterns (`urls.py`), as well as the views (`views.py`). The entities are stored as classes within a single file (as is typical within Django web development) and we also store our global constants and `Field.choices` in the same file (`models.py`).  
+The URL patterns refer directly to the views (functions and classes defined in `views.py`) which can be seen as controllers  rather than just views, since they also contain logic in regard to the data that ought to be displayed in the view. The `context` stores the data that is available for each view and is pre-defined, but may be manipulated by the view classes. The front-end classes `*.html` are located in `templates/` where the UI is generated and filled with the data from the respective contexts.  
+The overall software design pattern can therefore be seen as MVT (Model-View-Template). In terms of the more commonly known MVC-Pattern (Model-View-Controller), one could say that the Template in MVT corresponds to the View in MVC, and the View in MVT acts as the Controller in MVC. 
+
+---
+
+## JustDjango
+
 <p align="center">
   <p align="center">
     <a href="https://justdjango.com/?utm_source=github&utm_medium=logo" target="_blank">
@@ -9,19 +29,50 @@
   </p>
 </p>
 
-# Django E-commerce
 
-This is a very simple e-commerce website built with Django.
+Django E-commerce is a very simple e-commerce website template built with Django, where basic functionality (add to cart, checkout, payment process) is pre-implemented.
 
-## Quick demo
 
-[![alt text](https://justdjango.s3-us-west-2.amazonaws.com/media/gifs/djecommerce.gif "Logo")](https://youtu.be/z4USlooVXG0)
+<div align="center">
+
+<a href="https://www.youtube.com/channel/UCRM1gWNTDx0SHIqUJygD-kQ" target="_blank"><img src="https://img.shields.io/badge/YouTube-%23E4405F.svg?&style=flat-square&logo=youtube&logoColor=white" alt="YouTube"></a>
+<a href="https://www.twitter.com/justdjangocode" target="_blank"><img src="https://img.shields.io/badge/Twitter-%231877F2.svg?&style=flat-square&logo=twitter&logoColor=white" alt="Twitter"></a>
+
+</div>
 
 ---
 
-## Project Summary
+## Documentation
 
-The website displays products. Users can add and remove products to/from their cart while also specifying the quantity of each item. They can then enter their address and choose Stripe to handle the payment processing.
+In this section we provide a description of the most important models and views that we created or altered and give an insight into how they are composed technically as well as how they can be used.
+  
+### Item (Model)
+We have added multiple fields and methods to this entity such as a boolean availability field, attributes of the cat (coat length, gender, size, energy), and pictures. The items have been obviously repurposed into cat entities, though the model has not been renamed since this would have caused additional effort throughout the entire code and database environment.   
+
+### Order (Model)  
+>TODO  
+
+### OrderItem (Model)  
+>TODO  
+
+### HomeView (View)  
+The home page acts as an overview of all cats and provides an interactive UI through various filters. It can be accessed by clicking the *Overview* Button in the top header, but it is also the default home page. Each of the cats can be clicked in order to be referred to a detail page with additional information (see **ItemDetailView**). There are (non-chainable) filtering possibilities for the attributes coat length, size, and energy. The other attributes (gender and availability) are also displayed for each cat and one could easily add filters for them. The filters have been implemented from scratch and pass their input to the view class using a GET request. The view then filters the items and refreshes them accordingly in the context. The filters are not chainable since in Django, an already filtered query cannot be further filtered (due to database performance reasons) and thus a more complicated solution would have had to be chosen for this. The template `home.html` is used in the front-end, where the content design is very scalable: The cats, their attributes, and the filters are all accessed dynamically using the given context.
+
+### ItemDetailView (View)
+>TODO
+
+### CheckoutView (View)  
+The checkout page is called by clicking the *PROCEED TO CHECKOUT* button from the order summary (*Cart*). It has been redesigned to provide an interface where the user can select a time period where they would like to request the cat(s). This has been implemented from scratch and no external libraries have been used (only for styling). This means we use the basic `datetime-local` HTML input and parse the format manually. The front-end uses the template `checkout.html`. Before entering anything, the *From:* and *To:* dates already initialise according to the soonest / latest possible booking. Users can select their preferred time and date in the calendar that appears when clicking the calendar icon. The input is submitted instantly upon selection in order for the calendar widget to immediately adapt the possible choices. This means that, after choosing a *From:* date, the eligible *To:* dates should already respond to the chosen date according to the shortest / longest lending duration. The duration is therefore calculated within the view and there are some checks in place in case the user circumvents the workflow design.  
+>TODO the checkout page further contains... (order summary, pricing, address?)
+  
+### Further Views
+>TODO: HowTo, AboutUs (can be accessed by... have the purpose of...)
+
+
+---
+
+## Example Workflow
+>TODO 
 
 ---
 
@@ -42,7 +93,7 @@ virtualenv env
 That will create a new folder `env` in your project directory. Next activate it with this command on mac/linux:
 
 ```
-source env/bin/active
+source env/bin/activate
 ```
 
 Then install the project dependencies with
@@ -57,35 +108,5 @@ Now you can run the project with this command
 python manage.py runserver
 ```
 
-**Note** if you want payments to work you will need to enter your own Stripe API keys into the `.env` file in the settings files.
 
----
 
-## Follow the tutorial
-
-This project is part of a [series on YouTube](https://youtu.be/z4USlooVXG0) that teaches how to build an e-commerce website with Django.
-
----
-
-## Support
-
-If you'd like to support this project and all the other open source work on this organization, you can use the following options
-
-### Option 1: GitHub Sponsors
-
-Sponsor through GitHub Sponsors. On GitHub, [this repository](https://github.com/justdjango/django-ecommerce) shows a button where you can Sponsor the contributors.
-
-### Option 2: JustDjango
-
-If you're learning Django and want to take your next step to become a professional Django developer, consider signing up on [JustDjango](https://learn.justdjango.com).
-
----
-
-<div align="center">
-
-<i>Other places you can find us:</i><br>
-
-<a href="https://www.youtube.com/channel/UCRM1gWNTDx0SHIqUJygD-kQ" target="_blank"><img src="https://img.shields.io/badge/YouTube-%23E4405F.svg?&style=flat-square&logo=youtube&logoColor=white" alt="YouTube"></a>
-<a href="https://www.twitter.com/justdjangocode" target="_blank"><img src="https://img.shields.io/badge/Twitter-%231877F2.svg?&style=flat-square&logo=twitter&logoColor=white" alt="Twitter"></a>
-
-</div>
