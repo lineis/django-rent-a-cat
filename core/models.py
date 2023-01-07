@@ -34,8 +34,8 @@ GENDER_CHOICES = (
 )
 
 ADDRESS_CHOICES = (
-    ('B', 'Billing'),
-    ('S', 'Shipping'),
+    ('B', 'Billing'),               # used as cat address (location where the rented cat will stay)
+    ('S', 'Shipping'),              # used as personal address of the customer
 )
 
 # define global constants for min or max durations
@@ -60,8 +60,6 @@ class UserProfile(models.Model):
 class Item(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField(default = 4)
-    #price = models.FloatField() TODO: could be used for different hourly rates ?
-    #discount_price = models.FloatField(blank=True, null=True)
     available = models.BooleanField(default=True)
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
     label = models.CharField(choices=ENERGY_CHOICES, max_length=2)
@@ -110,26 +108,12 @@ class OrderItem(models.Model):
         return f"{self.quantity} of {self.item.title}"
 
     def get_total_item_price(self):
-        return self.item.price #self.quantity * self.item.price TODO: Clara - use rental duration and hourly rate?
+        return self.item.price
 
     def get_duration(self):
-        #if(hasattr(self, 'order')):
-        if(True):
-            return self.order_set.all()[0].get_rental_duration()
-        else:
-            return 1
-
-    def get_total_discount_item_price(self):
-        return 42 #self.quantity * self.item.discount_price
-
-    def get_amount_saved(self):
-        return 42 #self.get_total_item_price() - self.get_total_discount_item_price()
+        return self.order_set.all()[0].get_rental_duration()
 
     def get_final_price(self):
-        """if self.item.discount_price:
-            return self.get_total_discount_item_price()
-        return self.get_total_item_price()"""
-        #return 1
         return self.item.price * self.get_duration()
 
 class Order(models.Model):
@@ -137,10 +121,7 @@ class Order(models.Model):
                              on_delete=models.CASCADE)
     ref_code = models.CharField(max_length=20, blank=True, null=True)
     items = models.ManyToManyField(OrderItem)
-    # start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField()
-    #from_date = models.DateTimeField(default=False)
-    #to_date = models.DateTimeField(default=False)
     rental_duration = models.IntegerField(default=DEFAULT_RENTAL_DURATION)
     ordered = models.BooleanField(default=False)
     shipping_address = models.ForeignKey(

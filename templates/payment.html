@@ -1,101 +1,5 @@
 {% extends "base.html" %}
 
-{% block extra_head %}
-<style>
-
-#stripeBtnLabel {
-  font-family: "Helvetica Neue", Helvetica, sans-serif;
-  font-size: 16px;
-  font-variant: normal;
-  padding: 0;
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
-  font-weight: 500;
-  display: block;
-}
-
-#stripeBtn {
-  border: none;
-  border-radius: 4px;
-  outline: none;
-  text-decoration: none;
-  color: #fff;
-  background: #32325d;
-  white-space: nowrap;
-  display: inline-block;
-  height: 40px;
-  line-height: 40px;
-  box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
-  border-radius: 4px;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.025em;
-  text-decoration: none;
-  -webkit-transition: all 150ms ease;
-  transition: all 150ms ease;
-  
-  width: 100%
-}
-
-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 7px 14px rgba(50, 50, 93, .10), 0 3px 6px rgba(0, 0, 0, .08);
-  background-color: #43458b;
-}
-
-.stripe-form {
-  padding: 5px 30px;
-}
-
-#card-errors {
-  height: 20px;
-  padding: 4px 0;
-  color: #fa755a;
-}
-
-.stripe-form-row {
-  width: 100%;
-  float: left;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-
-.StripeElement {
-  box-sizing: border-box;
-
-  height: 40px;
-
-  padding: 10px 12px;
-
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background-color: white;
-
-  box-shadow: 0 1px 3px 0 #e6ebf1;
-  -webkit-transition: box-shadow 150ms ease;
-  transition: box-shadow 150ms ease;
-}
-
-.StripeElement--focus {
-  box-shadow: 0 1px 3px 0 #cfd7df;
-}
-
-.StripeElement--invalid {
-  border-color: #fa755a;
-}
-
-.StripeElement--webkit-autofill {
-  background-color: #fefde5 !important;
-}
-
-.current-card-form {
-  display: none;
-}
-
-</style>
-{% endblock extra_head %}
-
 {% block content %}
 
   <main >
@@ -104,10 +8,12 @@ button:hover {
       <h2 class="my-5 h2 text-center">Request Summary</h2>
 
       <div class="row">
+        {% for order_item in order.items.all %}
+          <!--set requested cats unavailable-->
+        {% endfor %}
 
         <div class="col-md-12 mb-4">
-          
-
+          <p>Success message: You successfully requested to rent our darling. Please make sure to... Below you find the summary or your order.</p>
         </div>
 
         {% include "order_snippet.html" %}
@@ -116,7 +22,7 @@ button:hover {
 
     </div>
   </main>
-
+  
 {% endblock content %}
 
 

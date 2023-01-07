@@ -59,10 +59,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('ref_code', models.CharField(max_length=20)),
-                # ('start_date', models.DateTimeField(auto_now_add=True)),
                 ('ordered_date', models.DateTimeField()),
-                #('from_date', models.DateTimeField(default=False)),
-                #('to_date', models.DateTimeField(default=False)),
                 ('ordered', models.BooleanField(default=False)),
                 ('being_delivered', models.BooleanField(default=False)),
                 ('received', models.BooleanField(default=False)),

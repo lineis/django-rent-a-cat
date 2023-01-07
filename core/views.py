@@ -132,7 +132,6 @@ class CheckoutView(View):
             messages.info(self.request, "You do not have an active order")
             return redirect("core:checkout")
 
-# ändern!
     def post(self, *args, **kwargs):
         form = CheckoutForm(self.request.POST or None)
         try:
@@ -142,7 +141,7 @@ class CheckoutView(View):
                 use_default_shipping = form.cleaned_data.get(
                     'use_default_shipping')
                 if use_default_shipping:
-                    print("Using the defualt shipping address")
+                    print("Using the default personal address")
                     address_qs = Address.objects.filter(
                         user=self.request.user,
                         address_type='S',
@@ -154,10 +153,10 @@ class CheckoutView(View):
                         order.save()
                     else:
                         messages.info(
-                            self.request, "No default shipping address available")
+                            self.request, "No default personal address available")
                         return redirect('core:checkout')
                 else:
-                    print("User is entering a new shipping address")
+                    print("User is entering a new personal address")
                     shipping_address1 = form.cleaned_data.get(
                         'shipping_address')
                     shipping_address2 = form.cleaned_data.get(
@@ -188,7 +187,7 @@ class CheckoutView(View):
 
                     else:
                         messages.info(
-                            self.request, "Please fill in the required shipping address fields")
+                            self.request, "Please fill in the required personal address fields")
 
                 use_default_billing = form.cleaned_data.get(
                     'use_default_billing')
@@ -205,7 +204,7 @@ class CheckoutView(View):
                     order.save()
 
                 elif use_default_billing:
-                    print("Using the defualt billing address")
+                    print("Using the defualt cat address")
                     address_qs = Address.objects.filter(
                         user=self.request.user,
                         address_type='B',
@@ -217,10 +216,10 @@ class CheckoutView(View):
                         order.save()
                     else:
                         messages.info(
-                            self.request, "No default billing address available")
+                            self.request, "No default cat address available")
                         return redirect('core:checkout')
                 else:
-                    print("User is entering a new billing address")
+                    print("User is entering a new cat address")
                     billing_address1 = form.cleaned_data.get(
                         'billing_address')
                     billing_address2 = form.cleaned_data.get(
@@ -251,7 +250,7 @@ class CheckoutView(View):
 
                     else:
                         messages.info(
-                            self.request, "Please fill in the required billing address fields")
+                            self.request, "Please fill in the required cat address fields")
 
                 payment_option = form.cleaned_data.get('payment_option')
 
@@ -259,7 +258,6 @@ class CheckoutView(View):
                     return redirect('core:payment', payment_option='stripe')
                 elif payment_option == 'P':
                     return redirect('core:payment', payment_option='paypal')
-                   # return redirect('core:success')
                 else:
                     messages.warning(
                         self.request, "Invalid payment option selected")
@@ -267,7 +265,6 @@ class CheckoutView(View):
         except ObjectDoesNotExist:
             messages.warning(self.request, "You do not have an active order")
             return redirect("core:order-summary")
-
 
 class PaymentView(View):
     def get(self, *args, **kwargs):
@@ -295,7 +292,7 @@ class PaymentView(View):
             return render(self.request, "payment.html", context)
         else:
             messages.warning(
-                self.request, "You have not added a billing address")
+                self.request, "You have not added a cat address")
             return redirect("core:checkout")
 
     def post(self, *args, **kwargs):
@@ -407,7 +404,6 @@ class PaymentView(View):
         messages.warning(self.request, "Invalid data received")
         return redirect("/payment/stripe/")
 
-
 class HomeView(ListView):
     model = Item
     paginate_by = 10
@@ -451,31 +447,12 @@ class HomeView(ListView):
 
         return context
 
-    # OLD FILTERS
-    # def get_context_data(self, **kwargs):
-    #     """
-    #     Add extra context for filtering categories.
-    #     :param kwargs:
-    #     :return:
-    #     """
-    #     context = super(HomeView, self).get_context_data(**kwargs)
-    #     # query for every category add a new list to the context
-    #     # example: for c = ('SH', 'Short Hair), add object_list_SH as list of all short haired cats
-    #     for c in CATEGORY_CHOICES:
-    #         context['object_list_'+c[0]] = Item.objects.filter(category__exact=c[0])
-    #     return context
-
 class HomeViewSearchResult(ListView):
     model = Item
     paginate_by = 10
     template_name = "home_search_result.html"
 
     def get_context_data(self, **kwargs):
-        """
-        Change content according to search results.
-        :param kwargs:
-        :return:
-        """
         context = super(HomeViewSearchResult, self).get_context_data(**kwargs)
         context['search_result'] = Item.objects.filter(title__contains='Pep')
         return context
@@ -515,12 +492,7 @@ def add_to_cart(request, slug):
         ordered_date = timezone.now()
         order = Order.objects.create(
             user=request.user, ordered_date=ordered_date)
-    #order_item.order=order
-    #order_item.save()
-    #print(order_item.__dict__)
     order.items.add(order_item)
-    #for item in order.items.all():
-    #    print(item.__dict__)
     messages.info(request, "This item was added to your cart.")
     return redirect("core:order-summary")
 
