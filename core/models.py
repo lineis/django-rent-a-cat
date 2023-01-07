@@ -16,7 +16,7 @@ CATEGORY_CHOICES = (
     ('LH', 'Long Hair')
 )
 
-LABEL_CHOICES = (
+ENERGY_CHOICES = (
     ('LE', 'Low Energy'),
     ('ME', 'Medium Energy'),
     ('HE', 'High Energy')
@@ -33,13 +33,19 @@ GENDER_CHOICES = (
     ('F', 'Girl')
 )
 
-# color?
-
 ADDRESS_CHOICES = (
-    ('B', 'Billing'),
-    ('S', 'Shipping'),
+    ('B', 'Billing'),               # used as cat address (location where the rented cat will stay)
+    ('S', 'Shipping'),              # used as personal address of the customer
 )
 
+# define global constants for min or max durations
+MIN_RENTAL_HOURS = 5                # minimum rental duration in hours
+MAX_RENTAL_DAYS = 7                 # maximum rental duration in days
+MAX_PREORDER_DAYS = 14              # maximum days a cat can be ordered in advance (cat may not be available anymore!)
+DEFAULT_RENTAL_DURATION = 1
+
+# date format that is used in front-end
+DATE_FORMAT = '%Y-%m-%dT%H:%M'
 
 class UserProfile(models.Model):
     user = models.OneToOneField(
@@ -53,16 +59,19 @@ class UserProfile(models.Model):
 
 class Item(models.Model):
     title = models.CharField(max_length=100)
-    #price = models.FloatField()
-    #discount_price = models.FloatField(blank=True, null=True)
-    available = models.BooleanField()
+    price = models.FloatField(default = 4)
+    available = models.BooleanField(default=True)
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
-    label = models.CharField(choices=LABEL_CHOICES, max_length=2)
+    label = models.CharField(choices=ENERGY_CHOICES, max_length=2)
     size = models.CharField(choices=SIZE_CHOICES, max_length=1, default='NULL')
     gender = models.CharField(choices=GENDER_CHOICES, max_length=1, default='M')
     slug = models.SlugField()
     description = models.TextField()
+    reviews = models.TextField(default="")
     image = models.ImageField()
+    image2 = models.ImageField()
+    image3 = models.ImageField()
+    image4 = models.ImageField()
 
     def __str__(self):
         return self.title
@@ -82,6 +91,11 @@ class Item(models.Model):
             'slug': self.slug
         })
 
+    def set_unavailable(self):
+        self.available = False
+
+    def set_available(self):
+        self.available = True
 
 class OrderItem(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -89,33 +103,26 @@ class OrderItem(models.Model):
     ordered = models.BooleanField(default=False)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
-
+    
     def __str__(self):
         return f"{self.quantity} of {self.item.title}"
 
     def get_total_item_price(self):
-        return 42 #self.quantity * self.item.price
+        return self.item.price
 
-    def get_total_discount_item_price(self):
-        return 42 #self.quantity * self.item.discount_price
-
-    def get_amount_saved(self):
-        return 42 #self.get_total_item_price() - self.get_total_discount_item_price()
+    def get_duration(self):
+        return self.order_set.all()[0].get_rental_duration()
 
     def get_final_price(self):
-        """if self.item.discount_price:
-            return self.get_total_discount_item_price()
-        return self.get_total_item_price()"""
-        return 42
-
+        return self.item.price * self.get_duration()
 
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     ref_code = models.CharField(max_length=20, blank=True, null=True)
     items = models.ManyToManyField(OrderItem)
-    start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField()
+    rental_duration = models.IntegerField(default=DEFAULT_RENTAL_DURATION)
     ordered = models.BooleanField(default=False)
     shipping_address = models.ForeignKey(
         'Address', related_name='shipping_address', on_delete=models.SET_NULL, blank=True, null=True)
@@ -151,6 +158,9 @@ class Order(models.Model):
         if self.coupon:
             total -= self.coupon.amount
         return total
+
+    def get_rental_duration(self):
+        return self.rental_duration
 
 
 class Address(models.Model):
