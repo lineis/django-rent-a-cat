@@ -111,7 +111,7 @@ python manage.py runserver
 
 ## Database Management
 
-The administrator interface lies at `/admin` where superusers can observe all current instances of entities, change them, or create new ones. If changes are made to the entity classes themselves (in `models.py`), [Django migrations](https://docs.djangoproject.com/en/4.1/topics/migrations/) have to be run afterwards in order for the changes to reflect in the database.
+The web-based administrator interface lies at `http://.../admin` where superusers can observe all current instances of entities, change them, or create new ones. If changes are made to the entity classes themselves (in `models.py`), [Django migrations](https://docs.djangoproject.com/en/4.1/topics/migrations/) have to be run afterwards in order for the changes to reflect in the database.
 
 
 
