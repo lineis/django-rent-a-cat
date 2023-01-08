@@ -13,7 +13,7 @@
         {% endfor %}
 
         <div class="col-md-12 mb-4">
-          <h3>Congratulations on your successful cat rental request! <br>Here is some important information about your upcoming rental:</h3>
+          <p>Congratulations on your successful cat rental request! Here is some important information about your upcoming rental:</p>
 
             <ul>You requested your furry rental for a duration of <strong> {{ order.get_rental_duration }} hours.</strong></ul>
             <ul>Your pickup location is Fürstenweg 2, Vaduz. Please be sure to arrive on time to retrieve your cat.</ul>
@@ -23,7 +23,7 @@
             <ul>Please make sure to handle the cat with care and follow all rules and guidelines provided to ensure a positive experience for both you and the cat.</ul>
             <ul>If you have any questions or concerns during your rental period, don't hesitate to contact us. We are here to help make sure your experience with Rent a Cat is a positive one.</ul>
             
-          <h3>We look forward to seeing you and your rental cat soon!</h3>
+            <p>We look forward to seeing you and your rental cat soon!</p>
         </div>
 
         {% include "order_snippet.html" %}
