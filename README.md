@@ -7,6 +7,19 @@ The goal of this online service is to provide a platform where animal shelters (
 
 ![](https://wallpapercave.com/wp/wp3208773.jpg)
 
+## Project Team
+
+|Name|Email|   
+|---|:---:|
+|Linus Eisele|linus.eisele@uni.li| 
+|Abena Nigg|abena.nigg@uni.li| 
+|Marie Weinz|marie.weinz@uni.li| 
+|Clara Ziche|clara.ziche@uni.li| 
+
+
+## Motivation
+The aim of the project is the practical application and consolidation of the learned methods and technologies from the modules Information Systems Development and Information System Modelling. It is meant to be a genuine idea that we turned into something real and thereby gained technical knowledge in both Python and Django. The goal of this online service is to provide a platform where animal shelters (or private persons) can post their cats and potential adopters can lend ("rent") them for a specific period of time. This facilitates close human-animal engagement and getting to know the cat better, which may result in further lendings or even an adoption. We believe that this concept has beneficial effects on the mental health of people (especially those who cannot permanently own a cat) while obviously also doing something good for the animals.
+
 ---
 
 ## Running this project
@@ -50,6 +63,37 @@ The URL patterns refer directly to the views (functions and classes defined in `
 The overall software design pattern can therefore be seen as MVT (Model-View-Template). In terms of the more commonly known MVC-Pattern (Model-View-Controller), one could say that the Template in MVT corresponds to the View in MVC, and the View in MVT acts as the Controller in MVC. 
 
 ---
+
+## Requirements Engineering
+In this section we provide an overview of the functional and non-functional requirements from the relevant stakeholders. The needs of the various stakeholders have been taken into account and listed for the elaboration of the system. The requirements were then classified and organised. 
+
+|Stakeholder|Description|   
+|:---|:---|
+|Cat enthusiasts |The cat lovers follow the invitation link of the homepage scroll through the page and book their favourite cat| 
+|Pet shelter manager|The pet shelter employee follows the invitation link of the homepage and list a new cat, which can be rented| 
+|Lecturer |The lecturer expects a software programme which corresponds to the description, and which covers material shown in class. The aim is to see that the students were able to use Python, Django, and Bootstrap. The goals are that students should get better insights into the project flow of software projects| 
+|Developers |Get in touch with the programming language Python and the web development framework Django. To increase the programming skills for further challenges. The ideal outcome is that the web app works like the project groups expectations| 
+
+Functional & Non-Functional Requirements
+Below is a table with the requirements for the system. The needs of the various stakeholders have been taken into account and listed for the elaboration of the system. The requirements were then classified and organised. 
+
+
+|Item|Requirement|Description|Type|  
+|---|:---|:---|:---|
+|1 |Create an account|Users shall be able to view, select, and rent cats|Functional| 
+2|Log into an account|Users shall be able to create accounts and log in	Functional|
+3|See availability of cats|The overview shall show pictures and the status of availability for each cat|Functional
+4|See details of cats |The detail view shall show further details and characteristics about the cat|Functional
+5|See overview of rented cats and due date |Users shall be able to see which cat they rented and when it is due to return|Functional
+6|See possibility to extend rental date |Users shall be able to extend their rental period to a maximum of x days	|Functional
+7|See overview of how cats |Managers should be able to add cats to be rented |Functional
+8|Get notified approaching due dates |Email should be sent out to remind users of due dates etc |Functional
+9|Get notified of missed deadline |Email notification of missed deadlines|Functional
+10|Get notified of new listed cats|Email notification of new listed cats which can be rented |Functional
+11|Process of renting|The operations renting a cat and logging into one's account should take no longer than 3 seconds for the application |Non-functional
+12|User experience of homepage|All other operations like navigation on the website or selecting a cat should take no longer than 1 second	|Non-functional
+13|See details of cats|The cat pictures should all be equally sized and have at least FHD resolution |Non-functional
+
 
 ## Documentation
 
