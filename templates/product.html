@@ -8,44 +8,41 @@
       <!--Grid row-->
       <div class="row wow fadeIn">
 
-        <!--Grid column-->
+        <!--Grid column with primary cat image-->
         <div class="col-md-6 mb-4">
-
-          <!-- <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/14.jpg" class="img-fluid" alt=""> -->
             <img src="{{ item.image.url }}" class="card-img-top">
-
         </div>
-        <!--Grid column-->
 
-        <!--Grid column-->
+        <!--Grid column with badges, price and texts-->
         <div class="col-md-6 mb-4">
 
-          <!--Content-->
           <div class="p-4">
-
+            <p class="my-1 h1">{{ object.title }}</p>
             <div class="mb-3">
               <a href="">
-                <span class="badge purple mr-1">{{ object.get_category_display }}</span>
+                <span class="badge badge-pill purple">{{ object.get_category_display }}</span>
+                <span class="badge badge-pill primary-color">{{ item.get_size_display }}</span>
+                <span class="badge badge-pill secondary-color">{{ item.get_label_display }}</span>
+                <span class="badge badge-pill btn-dark">{{ item.get_gender_display }}</span>
               </a>
             </div>
 
             <p class="lead">
-              {% if object.discount_price %}
-              <span class="mr-1">
-                <del>${{ object.price }}</del>
-              </span>
-              <span>${{ object.discount_price }}</span>
-              {% else %}
-              <span>${{ object.price }}</span>
-              {% endif %}
+              <span class="mr-1">Rental fee: {{ object.price }} €/h</span>
             </p>
+
+            <br></br>
 
             <p class="lead font-weight-bold">Description</p>
 
-            <p>{{ object.description }}</p>
+            <p class="lead">{{ object.description }}</p>
+            
+            <p class="lead font-weight-bold">Reviews</p>
 
+            <p class="lead">{{ object.reviews|linebreaks }}</p>
+            
             {% comment %} <form class="d-flex justify-content-left">
-              <!-- Default input -->
+              <!-- Add to cart and remove from cart buttons -->
               <input type="number" value="1" aria-label="Search" class="form-control" style="width: 100px">
               <button class="btn btn-primary btn-md my-0 p" type="submit">
                 Add to cart
@@ -62,7 +59,6 @@
             </a>
 
           </div>
-          <!--Content-->
 
         </div>
         <!--Grid column-->
@@ -78,11 +74,9 @@
         <!--Grid column-->
         <div class="col-md-6 text-center">
 
-          <h4 class="my-4 h4">Additional information</h4>
+          <h4 class="my-4 h4">Like me?</h4>
 
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo soluta odit
-            voluptates,
-            quibusdam officia. Neque quibusdam quas a quis porro? Molestias illo neque eum in laborum.</p>
+          <p></p>
 
         </div>
         <!--Grid column-->
@@ -90,34 +84,22 @@
       </div>
       <!--Grid row-->
 
-      <!--Grid row-->
+      <!--Grid row with additional cat photos-->
       <div class="row wow fadeIn">
 
         <!--Grid column-->
         <div class="col-lg-4 col-md-12 mb-4">
-
-          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg" class="img-fluid" alt="">
-
+          <img src="{{ item.image2.url }}" class="img-fluid" alt="">
         </div>
-        <!--Grid column-->
-
         <!--Grid column-->
         <div class="col-lg-4 col-md-6 mb-4">
-
-          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg" class="img-fluid" alt="">
-
+          <img src="{{ item.image3.url }}" class="img-fluid" alt="">
         </div>
-        <!--Grid column-->
-
         <!--Grid column-->
         <div class="col-lg-4 col-md-6 mb-4">
-
-          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg" class="img-fluid" alt="">
-
+          <img src="{{ item.image4.url }}" class="img-fluid" alt="">
         </div>
-        <!--Grid column-->
 
-      </div>
       <!--Grid row-->
 
     </div>
