@@ -1,9 +1,11 @@
 
 ## Project Description
 
-This website has been implemented within the Information Systems Development course 2022/23 at University of Liechtenstein. It is meant to be a genuine idea that we turned into something real and thereby gained technical knowledge in both Python and Django. The goal of this online service is to provide a platform where animal shelters (or private persons) can post their cats and potential adopters can lend ("rent") them for a specific period of time. This facilitates close human-animal engagement and getting to know the cat better, which may result in further lendings or even an adoption. We believe that this concept has beneficial effects on the mental health of people (especially those who cannot permanently own a cat) while obviously also doing something good for the animals.  
+Rent A Cat has been implemented within the Information Systems Development course 2022/23 at University of Liechtenstein. It is meant to be a genuine idea that we turned into something real and thereby gained technical knowledge in both Python and Django.   
   
-> (TODO: insert top banner from finished website?)
+The goal of this online service is to provide a platform where animal shelters (or private persons) can post their cats and potential adopters can lend ("rent") them for a specific period of time. This facilitates close human-animal engagement and getting to know the cat better, which may result in further lendings or even an adoption. We believe that this concept has beneficial effects on the mental health of people (especially those who cannot permanently own a cat) while obviously also doing something good for the animals.  
+
+![](https://wallpapercave.com/wp/wp3208773.jpg)
 
 ---
 
@@ -75,15 +77,20 @@ item: an object that represents an instance of the Item model, which has additio
 ### CheckoutView (View)  
 The checkout page is called by clicking the *PROCEED TO CHECKOUT* button from the order summary (*Cart*). It has been redesigned to provide an interface where the user can select a time period where they would like to request the cat(s). This has been implemented from scratch and no external libraries have been used (only for styling). This means we use the basic `datetime-local` HTML input and parse the format manually. The front-end uses the template `checkout.html`. Before entering anything, the *From:* and *To:* dates already initialise according to the soonest / latest possible booking. Users can select their preferred time and date in the calendar that appears when clicking the calendar icon. The input is submitted instantly upon selection in order for the calendar widget to immediately adapt the possible choices. This means that, after choosing a *From:* date, the eligible *To:* dates should already respond to the chosen date according to the shortest / longest lending duration. The duration is therefore calculated within the view and there are some checks in place in case the user circumvents the workflow design.  
 >TODO the checkout page further contains... (order summary, pricing, address?)
-  
-### Further Views
->TODO: HowTo, AboutUs (can be accessed by... have the purpose of...)
 
 
 ---
 
-## Example Workflow
->TODO 
+## [Example Workflow](https://scribehow.com/page/Documentation__Rent_a_Cat__WkY23ShXQUylnEWIjB6kKw)
+
+<!--
+<iframe 
+src="https://scribehow.com/embed/How_to_request_a_Booking__jenAy8kZTAa_eJQoD1-c-w" 
+width="100%" 
+height="640"
+frameborder="0">
+</iframe>
+-->
 
 ---
 
