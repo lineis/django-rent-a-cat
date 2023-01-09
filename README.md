@@ -9,6 +9,39 @@ The goal of this online service is to provide a platform where animal shelters (
 
 ---
 
+## Running this project
+
+To get this project up and running you should start by having Python installed on your computer. It's advised you create a virtual environment to store your projects dependencies separately. You can install virtualenv with
+
+```
+pip install virtualenv
+```
+
+Clone or download this repository and open it in your editor of choice. In a terminal (mac/linux) or windows terminal, run the following command in the base directory of this project
+
+```
+virtualenv env
+```
+
+That will create a new folder `env` in your project directory. Next activate it with this command on mac/linux:
+
+```
+source env/bin/activate
+```
+
+Then install the project dependencies with
+
+```
+pip install -r requirements.txt
+```
+
+Now you can run the project with this command
+
+```
+python manage.py runserver
+```
+---
+
 ## Technical Environment
 
 In order to realise our project, we used a simple e-commerce skeleton from [JustDjango](https://justdjango.com/?utm_source=github&utm_medium=logo) that uses (the free version of) a [Bootstrap Template](https://mdbootstrap.com/freebies/jquery/e-commerce/).  
@@ -92,39 +125,6 @@ frameborder="0">
 </iframe>
 -->
 
----
-
-## Running this project
-
-To get this project up and running you should start by having Python installed on your computer. It's advised you create a virtual environment to store your projects dependencies separately. You can install virtualenv with
-
-```
-pip install virtualenv
-```
-
-Clone or download this repository and open it in your editor of choice. In a terminal (mac/linux) or windows terminal, run the following command in the base directory of this project
-
-```
-virtualenv env
-```
-
-That will create a new folder `env` in your project directory. Next activate it with this command on mac/linux:
-
-```
-source env/bin/activate
-```
-
-Then install the project dependencies with
-
-```
-pip install -r requirements.txt
-```
-
-Now you can run the project with this command
-
-```
-python manage.py runserver
-```
 ---
 
 ## Database Management
