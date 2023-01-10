@@ -69,24 +69,24 @@ In this section we provide an overview of the functional and non-functional requ
 
 |Stakeholder|Description|   
 |:---|:---|
-|Cat enthusiasts |The cat lovers follow the invitation link of the homepage scroll through the page and book their favourite cat| 
-|Pet shelter manager|The pet shelter employee follows the invitation link of the homepage and list a new cat, which can be rented| 
+|Cat enthusiasts |The cat lovers are deeply in need of a furry friend but often cannot own an animal permanently or have the urge to try out an animal before adoption. They can scroll through the page and book their favorite cats.| 
+|Pet shelter manager|The animal shelters struggle to get people to adopt pets from them. They will be able to utilize our website as a strong promotion for their animals which will support them in finding new homes for their animals. They may list their cats themselves with admin access or provide website administrators with the required details.| 
 |Lecturer |The lecturer expects a software programme which corresponds to the description, and which covers material shown in class. The aim is to see that the students were able to use Python, Django, and Bootstrap. The goals are that students should get better insights into the project flow of software projects| 
 |Developers |Get in touch with the programming language Python and the web development framework Django. To increase the programming skills for further challenges. The ideal outcome is that the web app works like the project groups expectations| 
 
 Functional & Non-Functional Requirements
-Below is a table with the requirements for the system. The needs of the various stakeholders have been taken into account and listed for the elaboration of the system. The requirements were then classified and organised. 
+Below is a table with the requirements for the system. The needs of the various stakeholders have been taken into account and listed for the elaboration of the system. The requirements were then classified and organised. Not all of the requirements could be taken into account within our given time scope. 
 
 
 |Item|Requirement|Description|Type|  
 |---|:---|:---|:---|
 |1 |Create an account|Users shall be able to view, select, and rent cats|Functional| 
-2|Log into an account|Users shall be able to create accounts and log in	Functional|
+2|Log into an account|Users shall be able to create accounts and log in	|Functional
 3|See availability of cats|The overview shall show pictures and the status of availability for each cat|Functional
 4|See details of cats |The detail view shall show further details and characteristics about the cat|Functional
 5|See overview of rented cats and due date |Users shall be able to see which cat they rented and when it is due to return|Functional
 6|See possibility to extend rental date |Users shall be able to extend their rental period to a maximum of x days	|Functional
-7|See overview of how cats |Managers should be able to add cats to be rented |Functional
+7|Add or remove cats |Managers/Admins should be able to add/remove/edit cats in the database|Functional
 8|Get notified approaching due dates |Email should be sent out to remind users of due dates etc |Functional
 9|Get notified of missed deadline |Email notification of missed deadlines|Functional
 10|Get notified of new listed cats|Email notification of new listed cats which can be rented |Functional
