@@ -99,34 +99,33 @@ In this section we provide a description of the most important models and views 
 We have added multiple fields and methods to this entity such as a boolean availability field, attributes of the cat (coat length, gender, size, energy), and pictures. The items have been obviously repurposed into cat entities, though the model has not been renamed since this would have caused additional effort throughout the entire code and database environment.   
 
 ### Order (Model)  
-The Order model represents an order placed by a user. It has the following relevantfields:
-
-user: a foreign key to the user who placed the order.
-ref_code: a character field that represents a reference code for the order.
-items: a many-to-many field to the OrderItem objects that are part of the order.
-ordered_date: a date-time field that represents the date and time when the order was placed.
-rental_duration: an integer field that represents the rental duration for the items in the order.
-ordered: a boolean field that indicates whether the order has been placed.
+The Order model represents an order placed by a user. It has the following relevantfields:  
+- user: a foreign key to the user who placed the order.
+- ref_code: a character field that represents a reference code for the order.
+- items: a many-to-many field to the OrderItem objects (cats) that are part of the order.
+- ordered_date: a date-time field that represents the date and time when the order was placed.
+- rental_duration: an integer field that represents the rental duration for the cats in the order.
+- ordered: a boolean field that indicates whether the order has been placed.
 
 It also has the following methods:
 
-__str__: returns a string representation of the order, in the format self.user.username.
-get_total: returns the total cost of the order, which is calculated by adding up the final price of all the OrderItem objects in the order. 
-get_rental_duration: returns the rental duration for the items in the order.  
+- __str__: returns a string representation of the order.
+- get_total: returns the total cost of the order, which is calculated by adding up the final price of all the OrderItem objects in the order. 
+- get_rental_duration: returns the rental duration for the items in the order.  
 
 ### OrderItem (Model)  
 The OrderItem model represents a cat that is part of an order. It has the following relevant fields:
 
-user: a foreign key to the user who added the cat to their order.
-ordered: a boolean field that indicates whether the cat has been added to an order.
-item: a foreign key to the cat being ordered.
+- user: a foreign key to the user who added the cat to their order.
+- ordered: a boolean field that indicates whether the cat has been added to an order.
+- item: a foreign key to the cat being ordered.
 
 It also has the following methods:
 
-__str__: returns a string representation of the order item, in the format "{self.quantity} of {self.item.title}".
-get_total_item_price: returns the hourly rental fee of the order item
-get_duration: returns the rental duration of the order item. This is calculated as the rental duration of the associated Order object.
-get_final_price: returns the final price of the order item, which is calculated as the product of the item's price and the rental duration. 
+- __str__: returns a string representation of the order item.
+- get_total_item_price: returns the hourly rental fee of the order item.
+- get_duration: returns the rental duration of the order item. This is calculated as the rental duration of the associated Order object.
+- get_final_price: returns the final price of the order item, which is calculated as the product of the item's price and the rental duration. 
 
 ### HomeView (View)  
 The home page acts as an overview of all cats and provides an interactive UI through various filters. It can be accessed by clicking the *Overview* Button in the top header, but it is also the default home page. Each of the cats can be clicked in order to be referred to a detail page with additional information (see **ItemDetailView**). There are (non-chainable) filtering possibilities for the attributes coat length, size, and energy. The other attributes (gender and availability) are also displayed for each cat and one could easily add filters for them. The filters have been implemented from scratch and pass their input to the view class using a GET request. The view then filters the items and refreshes them accordingly in the context. The filters are not chainable since in Django, an already filtered query cannot be further filtered (due to database performance reasons) and thus a more complicated solution would have had to be chosen for this. The template `home.html` is used in the front-end, where the content design is very scalable: The cats, their attributes, and the filters are all accessed dynamically using the given context.
@@ -134,22 +133,19 @@ The home page acts as an overview of all cats and provides an interactive UI thr
 ### ItemDetailView (View) & Product Page (HTML)
 The product page extends base.html and overrides the content block. It is used to display the details of our rental cats. The page displays the following information about the cats:
 
-An image of the cat
-The cats's name, category, size, label, and gender
-The rental fee for the cat
-A description of the cat
-Any reviews of the cat
-Two buttons: one to add the cat to the cart, and another to remove it from the cart
-The page also displays additional images of the cat.
-
-The page uses the following variables:
-
-object: the cat being displayed
-item: an object that represents an instance of the Item model, which has additional information about the cat (such as its size, label, and gender)
+- An image of the cat
+- The cats's name, category, size, label, and gender
+- The rental fee for the cat
+- A description of the cat
+- Any reviews of the cat
+- Two buttons: one to add the cat to the cart, and another to remove it from the cart
+- The page also displays additional images of the cat.
 
 ### CheckoutView (View)  
+The checkout process contains an order summary, a pricing calculation based on the rental duration the user enters, and an address form. The order summary (*Ca(r)t*) lists the selected cat(s) with the global hourly rental fee and allows users to either deselect one or several of the cats, continue the shopping process or proceed to checkout.
 The checkout page is called by clicking the *PROCEED TO CHECKOUT* button from the order summary (*Cart*). It has been redesigned to provide an interface where the user can select a time period where they would like to request the cat(s). This has been implemented from scratch and no external libraries have been used (only for styling). This means we use the basic `datetime-local` HTML input and parse the format manually. The front-end uses the template `checkout.html`. Before entering anything, the *From:* and *To:* dates already initialise according to the soonest / latest possible booking. Users can select their preferred time and date in the calendar that appears when clicking the calendar icon. The input is submitted instantly upon selection in order for the calendar widget to immediately adapt the possible choices. This means that, after choosing a *From:* date, the eligible *To:* dates should already respond to the chosen date according to the shortest / longest lending duration. The duration is therefore calculated within the view and there are some checks in place in case the user circumvents the workflow design.  
->TODO the checkout page further contains... (order summary, pricing, address?)
+The pricing calculation takes the user input, from which the rental duration is calculated as an integer, and multiplies the rental fee by the rental duration. As the rental duration is calculated and saved for the order entity, whereas the price (rental fee) is stored with the cat item, it took us quite some unsuccessful attempts until we figured out how to bring the two entities together for the price calculation in the OrderItem entity. Now it looks ridiculously easy... 
+The address form on the checkout page takes the personal address and the cat address (if the cat is not staying at the place specified with the personal address). Some buttons allow the users to set and reuse default personal and cat addresses, and also only fill in one of the two if they are the same. In the same form, the user is also forced to select a payment option (cash by pick-up or PayPal by pick-up), only then he can submit his request (rather than order a living animal unchecked) and is directed to a success page that holds further information: the rental duration, a summary of the cats and the price, some important hints and tips, and the pick up place.
 
 
 ---
