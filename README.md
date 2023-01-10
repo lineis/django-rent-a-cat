@@ -1,9 +1,9 @@
 
 ## Project Description
 
-Rent A Cat has been implemented within the Information Systems Development course 2022/23 at University of Liechtenstein. It is meant to be a genuine idea that we turned into something real and thereby gained technical knowledge in both Python and Django.   
+Rent A Cat has been implemented within the Information Systems Development course 2022/23 at University of Liechtenstein. The aim of the project is the practical application and consolidation of the acquired methods and knowledge from the modules Information Systems Development and Information System Modelling. It is meant to be a genuine idea that we turned into something real and thereby gained technical knowledge in both Python and Django.   
   
-The goal of this online service is to provide a platform where animal shelters (or private persons) can post their cats and potential adopters can lend ("rent") them for a specific period of time. This facilitates close human-animal engagement and getting to know the cat better, which may result in further lendings or even an adoption. We believe that this concept has beneficial effects on the mental health of people (especially those who cannot permanently own a cat) while obviously also doing something good for the animals.  
+The goal of the website Rent A Cat is to provide a platform where animal shelters (or private persons) can post their cats and potential adopters can lend ("rent") them for a specific period of time. This facilitates close human-animal engagement and getting to know the cat better, which may result in further lendings or even an adoption. We believe that this concept has beneficial effects on the mental health of people (especially those who cannot permanently own a cat) while obviously also doing something good for the animals.  
 
 ![](https://wallpapercave.com/wp/wp3208773.jpg)
 
@@ -15,10 +15,6 @@ The goal of this online service is to provide a platform where animal shelters (
 |Abena Nigg|abena.nigg@uni.li| 
 |Marie Weinz|marie.weinz@uni.li| 
 |Clara Ziche|clara.ziche@uni.li| 
-
-
-## Motivation
-The aim of the project is the practical application and consolidation of the learned methods and technologies from the modules Information Systems Development and Information System Modelling. It is meant to be a genuine idea that we turned into something real and thereby gained technical knowledge in both Python and Django. The goal of this online service is to provide a platform where animal shelters (or private persons) can post their cats and potential adopters can lend ("rent") them for a specific period of time. This facilitates close human-animal engagement and getting to know the cat better, which may result in further lendings or even an adoption. We believe that this concept has beneficial effects on the mental health of people (especially those who cannot permanently own a cat) while obviously also doing something good for the animals.
 
 ---
 
