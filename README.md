@@ -5,6 +5,9 @@ Rent A Cat has been implemented within the Information Systems Development cours
   
 The goal of the website Rent A Cat is to provide a platform where animal shelters (or private persons) can post their cats and potential adopters can lend ("rent") them for a specific period of time. This facilitates close human-animal engagement and getting to know the cat better, which may result in further lendings or even an adoption. We believe that this concept has beneficial effects on the mental health of people (especially those who cannot permanently own a cat) while obviously also doing something good for the animals.  
 
+
+**As of January 11th 2023 the website is finally deployed online at https://msnw.pythonanywhere.com/.**
+
 ![](https://wallpapercave.com/wp/wp3208773.jpg)
 
 ## Project Team
