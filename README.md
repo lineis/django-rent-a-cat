@@ -19,6 +19,10 @@ The goal of the website Rent A Cat is to provide a platform where animal shelter
 |Marie Weinz|marie.weinz@uni.li| 
 |Clara Ziche|clara.ziche@uni.li| 
 
+Since the wellbeing of our feline friends is of top priority at Rent A Cat, we further employed professional assistance to inform us about any irregularities. Meet our compliance officers:  
+
+![](https://i.imgur.com/9jLJmb9.jpeg)
+
 ---
 
 ## Running this project
