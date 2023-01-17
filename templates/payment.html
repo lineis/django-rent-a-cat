@@ -13,7 +13,17 @@
         {% endfor %}
 
         <div class="col-md-12 mb-4">
-          <p>Success message: You successfully requested to rent our darling. Please make sure to... Below you find the summary or your order.</p>
+          <h3>Congratulations on your successful cat rental request! <br>Here is some important information about your upcoming rental:</h3>
+
+            <ul>You requested your furry rental for a duration of <strong> {{ order.get_rental_duration }} hours.</strong></ul>
+            <ul>Your pickup location is Fürstenweg 2, Vaduz. Please be sure to arrive on time to retrieve your cat.</ul>
+            <ul>The cat you have selected is listed below, and you can find more information about them on their profile page.</ul>
+            <ul>Please make sure to provide a safe and comfortable environment for the cat during their stay with you. This includes having a litter box, food and water dishes, and a place for them to sleep.</ul>
+            <ul>The cat will come with all necessary supplies, including a litter box, litter, food, and a carrier for transport.</ul>
+            <ul>Please make sure to handle the cat with care and follow all rules and guidelines provided to ensure a positive experience for both you and the cat.</ul>
+            <ul>If you have any questions or concerns during your rental period, don't hesitate to contact us. We are here to help make sure your experience with Rent a Cat is a positive one.</ul>
+            
+          <h3>We look forward to seeing you and your rental cat soon!</h3>
         </div>
 
         {% include "order_snippet.html" %}
