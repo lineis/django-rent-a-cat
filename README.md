@@ -12,12 +12,12 @@ The goal of the website Rent A Cat is to provide a platform where animal shelter
 
 ## Project Team
 
-|Name|Email|   
+|Contributors|Contact|   
 |---|:---:|
-|Linus Eisele|linus.eisele@uni.li| 
-|Abena Nigg|abena.nigg@uni.li| 
-|Marie Weinz|marie.weinz@uni.li| 
-|Clara Ziche|clara.ziche@uni.li| 
+|Linus Eisele|forename.surname@uni.li| 
+|Abena Nigg|| 
+|Marie Weinz|| 
+|Clara Ziche|| 
 
 Since the wellbeing of our feline friends is of top priority at Rent A Cat, we further employed professional assistance to inform us about any irregularities. Meet our compliance officers:  
 
